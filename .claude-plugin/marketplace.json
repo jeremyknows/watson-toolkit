@@ -1,17 +1,22 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "watson-toolkit",
-  "description": "Jeremy's full skill suite for Claude CoWork",
   "owner": {
     "name": "Jeremy Jannielli",
     "email": "jeremy@veefriends.com"
   },
+  "metadata": {
+    "description": "Jeremy's full skill suite for Claude CoWork"
+  },
   "plugins": [
     {
       "name": "watson-toolkit",
+      "source": "./plugins/watson-toolkit",
       "description": "33 skills for research, writing, dev, planning, design, and documents",
-      "source": ".",
-      "category": "productivity",
+      "version": "1.1.0",
+      "author": {
+        "name": "Jeremy Jannielli",
+        "email": "jeremy@veefriends.com"
+      },
       "homepage": "https://github.com/jeremyknows/watson-toolkit"
     }
   ]
