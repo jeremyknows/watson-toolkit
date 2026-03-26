@@ -27,8 +27,10 @@ SOFTWARE.
 This plugin bundles skills from multiple sources. Each retains its original license:
 
 - **pdf, docx, pptx, xlsx** — Source-available, Anthropic Inc. See LICENSE.txt in each skill directory.
-- **canvas-design, frontend-design, doc-coauthoring, skill-creator, web-artifacts-builder** — Apache 2.0, Anthropic Inc.
+- **canvas-design, doc-coauthoring, frontend-design, skill-creator, web-artifacts-builder** — Apache 2.0, Anthropic Inc.
 - **last30days** — MIT, mvanhorn. See skills/last30days/LICENSE.
 - **jackbutcher-voice** — Based on data from github.com/visualizevalue/jackbutcher.md.
-- **humanizer** — MIT. See skills/humanizer/LICENSE.
+- **humanizer** — MIT, Siqi Chen. See skills/humanizer/LICENSE.
+- **receiving-feedback** — Adapted from obra/superpowers, MIT.
+- **publish-skills** — MIT, jeremyknows.
 - All other skills — MIT, Jeremy Jannielli.

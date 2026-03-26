@@ -1,17 +1,18 @@
 # Watson Toolkit
 
-A Claude plugin bundling 32 production-tested skills for research, writing, development, planning, design, review, and document creation.
+A Claude plugin bundling 35 production-tested skills for research, writing, development, planning, design, review, and document creation.
 
 Built by a non-technical founder who runs AI agent infrastructure daily. Every skill here solves a real workflow problem.
 
 ## Installation
 
 ### CoWork (Desktop)
-Add from GitHub: `jeremyknows/watson-toolkit`
+Settings > Add marketplace > `https://github.com/jeremyknows/watson-toolkit`
 
 ### Claude Code (CLI)
 ```bash
-claude --plugin-dir ./  # session-only
+/plugin marketplace add jeremyknows/watson-toolkit
+/plugin install watson-toolkit@watson-toolkit
 ```
 
 ## Skills
@@ -56,13 +57,16 @@ claude --plugin-dir ./  # session-only
 ### Review (1)
 - **prism** — Parallel review by 5+ independent specialist models.
 
-### Utility (3)
+### Utility (5)
 - **markdown-fetch** — Fetch web content as clean markdown (80% token reduction).
 - **skill-creator** — Create new skills, run evals, iterate, optimize.
 - **playground** — Interactive HTML playground builder.
+- **publish-plugin** — Format, validate, and package CoWork plugins for distribution.
+- **publish-skills** — Checklist for publishing Agent Skills spec-compliant skills to GitHub.
 
-### Meta (1)
+### Meta (2)
 - **doc-coauthoring** — Three-stage doc writing: context gathering, refinement, reader testing.
+- **skill-doctor** — Diagnose, audit, and improve existing AgentSkills.
 
 ## Updating
 
@@ -76,12 +80,15 @@ claude --plugin-dir ./  # session-only
 
 | Source | Skills | License |
 |--------|--------|---------|
-| Original | 20 skills | MIT |
-| [Anthropic](https://github.com/anthropics/skills) | canvas-design, doc-coauthoring, frontend-design, skill-creator, web-artifacts-builder, update-docs | Apache 2.0 |
+| Original | autoresearch, brainstorming, deep-research, grill-me, intellectual-honesty, make-interfaces-feel-better, plan-review, playground, prd-to-issues, proposal-maker, publish-plugin, skill-doctor, systematic-debugging, ubiquitous-language, update-docs, write-a-prd, writing-plans, x-master | MIT |
+| [Anthropic](https://github.com/anthropics/skills) | canvas-design, doc-coauthoring, frontend-design, skill-creator, web-artifacts-builder | Apache 2.0 |
 | [Anthropic](https://github.com/anthropics/skills) | pdf, docx, pptx, xlsx | Source-available |
 | [mvanhorn](https://github.com/mvanhorn/last30days-skill) | last30days | MIT |
 | [Visualize Value](https://github.com/visualizevalue/jackbutcher.md) | jackbutcher-voice (voice data) | See source |
+| [Siqi Chen](https://github.com/blader/humanizer) | humanizer | MIT |
+| [obra/superpowers](https://github.com/obra/superpowers) | receiving-feedback | Adapted, MIT |
+| [jeremyknows](https://github.com/jeremyknows/publish-skills) | publish-skills | MIT |
 
 ## License
 
-MIT. See [LICENSE](./LICENSE). Bundled third-party skills retain their original licenses.
+MIT. Bundled third-party skills retain their original licenses. See [LICENSE](../../LICENSE).

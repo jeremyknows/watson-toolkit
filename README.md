@@ -1,6 +1,6 @@
 # Watson Toolkit
 
-Jeremy's full skill suite — 33 skills for research, writing, dev, planning, design, and document creation.
+Jeremy's full skill suite — 35 skills for research, writing, dev, planning, design, and document creation.
 
 ## Install
 
