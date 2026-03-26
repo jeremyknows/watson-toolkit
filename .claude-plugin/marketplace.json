@@ -9,8 +9,8 @@
   },
   "plugins": [
     {
-      "name": "watson-toolkit-plugin",
-      "source": "./plugins/watson-toolkit-plugin",
+      "name": "watson-toolkit",
+      "source": "./watson-toolkit",
       "description": "Full skill suite for research, writing, dev, planning, and documents"
     }
   ]
