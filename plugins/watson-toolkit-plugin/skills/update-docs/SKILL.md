@@ -8,13 +8,6 @@ description: |
   (5) user is onboarding to a new project and needs architecture overview,
   (6) after significant code changes that may have made existing docs outdated.
   Works with any language or project type.
-license: MIT
-metadata:
-  author: jeremyknows
-  version: "1.0.0"
-  openclaw:
-    requires:
-      bins: ["python3"]
 ---
 
 # Update Docs

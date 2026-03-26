@@ -5,10 +5,6 @@ description: |
   Trigger conditions: test failure, production bug, unexpected behavior, performance regression,
   build failure, integration error, or any time you're about to "just try something."
   NOT FOR: feature development, code review, or issues already diagnosed with known root cause.
-version: 2.0.0
-taxonomy_category: Code Quality & Review
-health_score: 11/14
-last_improved: 2026-03-19
 ---
 
 # Systematic Debugging

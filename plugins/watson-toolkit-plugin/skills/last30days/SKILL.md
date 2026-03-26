@@ -1,62 +1,9 @@
 ---
 name: last30days
-version: "2.9.5"
 description: "Deep research engine covering the last 30 days across 10+ sources - Reddit, X/Twitter, YouTube, TikTok, Instagram, Hacker News, Polymarket, Bluesky, Truth Social, web. AI synthesizes findings into grounded, cited reports. The most comprehensive recency research skill on ClawHub."
 argument-hint: 'last30 AI video tools, last30 best project management tools'
 allowed-tools: Bash, Read, Write, AskUserQuestion, WebSearch
-homepage: https://github.com/mvanhorn/last30days-skill
-repository: https://github.com/mvanhorn/last30days-skill
-author: mvanhorn
-license: MIT
 user-invocable: true
-metadata:
-  openclaw:
-    emoji: "📰"
-    requires:
-      env:
-        - SCRAPECREATORS_API_KEY
-      optionalEnv:
-        - OPENAI_API_KEY
-        - XAI_API_KEY
-        - OPENROUTER_API_KEY
-        - PARALLEL_API_KEY
-        - BRAVE_API_KEY
-        - APIFY_API_TOKEN
-        - AUTH_TOKEN
-        - CT0
-        - BSKY_HANDLE
-        - BSKY_APP_PASSWORD
-        - TRUTHSOCIAL_TOKEN
-      bins:
-        - node
-        - python3
-    primaryEnv: SCRAPECREATORS_API_KEY
-    files:
-      - "scripts/*"
-    homepage: https://github.com/mvanhorn/last30days-skill
-    tags:
-      - research
-      - deep-research
-      - reddit
-      - x
-      - twitter
-      - youtube
-      - tiktok
-      - instagram
-      - hackernews
-      - polymarket
-      - bluesky
-      - truthsocial
-      - trends
-      - recency
-      - news
-      - citations
-      - multi-source
-      - social-media
-      - analysis
-      - web-search
-      - ai-skill
-      - clawhub
 ---
 
 # last30days v2.9.5: Research Any Topic from the Last 30 Days

@@ -1,6 +1,5 @@
 ---
 name: brainstorming
-version: 2.0.0
 description: >
   Use before any creative work — creating features, building components, adding
   functionality, or modifying behavior. Explores user intent, requirements, and
@@ -9,11 +8,6 @@ description: >
   NOT FOR: debugging known bugs (use systematic-debugging), writing implementation
   plans (use writing-plans), executing existing plans (use executing-plans),
   trivial one-liner changes where design is obvious.
-taxonomy_category: Code Scaffolding
-health_score: 11/14
-last_improved: 2026-03-19
-author: jeremyknows
-license: MIT
 ---
 
 # Brainstorming Ideas Into Designs

@@ -6,10 +6,6 @@ description: |
   (3) analyzing webpage content, (4) any web_fetch where you need the text content.
   Reduces token usage by 80% compared to raw HTML. Skip only for API endpoints,
   raw files, or when you specifically need HTML structure for scraping.
-license: MIT
-metadata:
-  author: jeremyknows
-  version: "1.0.0"
 ---
 
 # Markdown Fetch

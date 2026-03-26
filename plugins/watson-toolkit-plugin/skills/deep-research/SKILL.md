@@ -9,14 +9,6 @@ description: >
   NOT FOR: quick factual lookups (just answer), news summaries (use last30days),
   academic paper synthesis requiring 10+ peer-reviewed sources (use a dedicated academic
   search tool), real-time market data, debugging code (use systematic-debugging).
-version: 1.4.0
-license: MIT
-taxonomy_category: Research & Analysis
-health_score: 12/14
-status: GA
-last_improved: 2026-03-23
-metadata:
-  author: jeremyknows
 ---
 
 # Deep Research 🔬

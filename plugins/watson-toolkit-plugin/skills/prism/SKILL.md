@@ -7,11 +7,6 @@ description: |
   code changes, (3) validating designs before implementation, (4) stress-testing
   role cards or policies, (5) any decision where you need adversarial perspectives.
   Core insight: Disagreements are more valuable than consensus.
-license: MIT
-compatibility: Works with any agent that can spawn subagents or run sequential reviews
-metadata:
-  author: jeremyknows
-  version: "1.0.0"
 ---
 
 # PRISM - Parallel Review by Independent Specialist Models

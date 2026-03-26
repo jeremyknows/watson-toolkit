@@ -1,6 +1,5 @@
 {
   "name": "watson-toolkit",
-  "display_name": "Watson Toolkit",
   "description": "Jeremy's full skill suite — research, writing, dev, planning, design, and document creation. 32 skills bundled for Claude CoWork.",
   "version": "1.0.0",
   "author": {

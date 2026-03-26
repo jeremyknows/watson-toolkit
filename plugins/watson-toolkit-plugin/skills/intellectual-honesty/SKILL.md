@@ -5,8 +5,6 @@ description: >
   needs honest assessment over comfortable agreement. Use when asked to evaluate,
   critique, audit, assess, or when the stakes are high enough that agreement bias
   could cause real damage. Not for routine operational tasks.
-version: 1.0.0
-tags: [quality, anti-sycophancy, reasoning, meta-skill, universal]
 ---
 
 # Intellectual Honesty
