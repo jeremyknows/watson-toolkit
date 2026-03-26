@@ -1,0 +1,17 @@
+{
+  "name": "jeremy-tools",
+  "owner": {
+    "name": "Jeremy Jannielli",
+    "email": "jeremy@veefriends.com"
+  },
+  "metadata": {
+    "description": "Jeremy's personal Claude skill bundles"
+  },
+  "plugins": [
+    {
+      "name": "watson-toolkit-plugin",
+      "source": "./plugins/watson-toolkit-plugin",
+      "description": "Full skill suite for research, writing, dev, planning, and documents"
+    }
+  ]
+}
