@@ -3,142 +3,191 @@ name: publish-plugin
 description: >
   Format, validate, and package a Cowork plugin for distribution. Use when the user asks to
   "publish a plugin", "package a plugin", "make a .plugin file", "fix my plugin structure",
-  "validate my plugin", "why won't my plugin install", or needs help turning a set of skills
-  into an installable .plugin file. Also use when troubleshooting plugin installation failures.
+  "validate my plugin", "why won't my plugin install", "set up a marketplace", or needs help
+  turning a set of skills into an installable plugin. Also use when troubleshooting plugin
+  installation failures or marketplace sync errors.
 ---
 
 # Publish Plugin
 
-Package and validate a Claude CoWork plugin for distribution. Handles structure validation, common mistake detection, and .plugin file creation.
+Package and validate a Cowork plugin so it installs without errors. Covers both .plugin file packaging and GitHub marketplace distribution.
 
-**Two distribution paths exist. Know which one you need:**
+## Key Concept: Plugins vs Marketplaces
 
-| Method | What CoWork expects | When to use |
-|--------|-------------------|-------------|
-| **Zip upload** (.plugin file) | `plugin.json` at zip root, skills/ at zip root | Fastest for private plugins |
-| **GitHub marketplace** ("Add marketplace" dialog) | `marketplace.json` at repo root, plugin in `plugins/` subdirectory | Best for version-controlled, shareable plugins |
+A **plugin** and a **marketplace** are two different things with separate file structures. They CANNOT share the same `.claude-plugin/` directory.
 
-These are DIFFERENT structures. A zip-uploadable plugin will NOT work as a GitHub marketplace, and vice versa.
+- A **plugin** has `.claude-plugin/plugin.json` and contains skills, agents, hooks, etc.
+- A **marketplace** has `.claude-plugin/marketplace.json` and is a catalog that lists plugins and where to find them.
 
-## Step 1: Locate the Plugin
+When distributing via GitHub, the repo IS the marketplace, and the plugin lives in a subdirectory inside it.
 
-Determine where the plugin files are:
-- A local directory (e.g., `~/Projects/my-plugin`)
-- A GitHub repo URL
-- A zip file
-- Loose skill files that need to be organized
+## Step 1: Determine Distribution Method
 
-If the user has loose SKILL.md files, help them create the plugin structure first. See `references/plugin-structure.md` for the canonical layout.
+Ask the user how they want to distribute:
 
-## Step 2: Choose Distribution Path
+**Option A — .plugin file only**: Package as a zip with `.plugin` extension. Users install by uploading the file. Skip to Step 2.
 
-### Path A: Zip Upload (.plugin file)
+**Option B — GitHub marketplace** (recommended for auto-updates): The repo acts as a marketplace with the plugin in a subdirectory. Users add via "Add marketplace" in Cowork settings. Go to Step 2, then Step 6.
 
-Structure the plugin with `plugin.json` at root:
+## Step 2: Validate Plugin Structure
+
+A valid **plugin** directory must have this layout:
 
 ```
-my-plugin/
+plugin-name/
 ├── .claude-plugin/
-│   └── plugin.json          ← plugin manifest at root
+│   └── plugin.json          ← REQUIRED (plugin manifest)
 ├── skills/
-│   └── my-skill/SKILL.md
-└── README.md
+│   └── skill-name/
+│       ├── SKILL.md          ← REQUIRED per skill
+│       └── references/       ← optional
+├── README.md                 ← recommended
 ```
 
-### Path B: GitHub Marketplace
+Run these checks:
 
-Structure as a marketplace repo with the plugin in a subdirectory:
+### Check 1: plugin.json exists and is valid
 
+Required fields in `.claude-plugin/plugin.json`:
+```json
+{
+  "name": "kebab-case-name",
+  "description": "Brief explanation",
+  "version": "X.Y.Z"
+}
 ```
-my-marketplace/
-├── .claude-plugin/
-│   └── marketplace.json     ← ONLY marketplace.json here (NO plugin.json)
-├── plugins/
-│   └── my-plugin/
-│       ├── .claude-plugin/
-│       │   └── plugin.json  ← plugin manifest lives HERE
-│       └── skills/
-│           └── my-skill/SKILL.md
-└── README.md
-```
+- `name`: kebab-case (lowercase, hyphens, no spaces)
+- `version`: semver format
+- `author`: optional but recommended — `{ "name": "...", "email": "..." }`
 
-**Critical:** `"source": "."` (self-referencing) is INVALID for marketplace entries. The plugin MUST be in a subdirectory. Use `"source": "./plugins/my-plugin"`.
-
-## Step 3: Validate Structure
-
-Run these checks in order:
-
-1. **Correct manifest at root:**
-   - Zip upload → `.claude-plugin/plugin.json` exists
-   - GitHub marketplace → `.claude-plugin/marketplace.json` exists (NOT plugin.json)
-
-2. **plugin.json has valid fields:**
-   - `name` — REQUIRED. Kebab-case, lowercase, max 64 characters
-   - `description` — recommended
-   - `version` — recommended, semver format
-   - `author` — optional, must be object `{"name": "..."}` NOT a string
-   - **No `display_name`** — this field fails validation
-
-3. **Every directory under `skills/` contains a `SKILL.md`:**
-   ```bash
-   for dir in skills/*/; do [ ! -f "$dir/SKILL.md" ] && echo "MISSING: $dir"; done
-   ```
-
-4. **Every `SKILL.md` has valid YAML frontmatter** with `name` and `description`. Only use standard fields — `version`, `license`, `author`, `tags`, `metadata` in frontmatter will FAIL validation.
-
-5. **No nested SKILL.md files** inside other skills:
-   ```bash
-   find skills -name "SKILL.md" -not -path "skills/*/SKILL.md"
-   ```
-   CoWork counts these as extra skills, inflating the skill count.
-
-6. **No stale files:** nested `.claude-plugin/` dirs inside skills, `.git/` directories inside skill folders.
-
-See `references/common-mistakes.md` for the full list of 10 issues we've encountered.
-
-## Step 4: Run CLI Validation
+### Check 2: Every skill directory has a SKILL.md
 
 ```bash
-cd /path/to/plugin    # or marketplace root
+for dir in skills/*/; do
+  [ ! -f "$dir/SKILL.md" ] && echo "MISSING: $dir"
+done
+```
+
+### Check 3: Every SKILL.md has valid YAML frontmatter
+
+```yaml
+---
+name: skill-name          # must match directory name
+description: >            # third-person with trigger phrases in quotes
+  Description here.
+---
+```
+
+### Check 4: No nested SKILL.md files
+
+Only `skills/*/SKILL.md` is valid as a top-level skill. SKILL.md files deeper than that (e.g., `skills/foo/variants/bar/SKILL.md`) get counted as separate skills and inflate the count.
+
+```bash
+find skills -name "SKILL.md" -not -path "skills/*/SKILL.md"
+# Should return nothing
+```
+
+## Step 3: Run CLI Validation
+
+```bash
+claude plugin validate .claude-plugin/plugin.json
+```
+
+## Step 4: Package as .plugin File
+
+```bash
+cd /path/to/plugin-directory
+zip -r /tmp/PLUGIN_NAME.plugin . \
+  -x "*.DS_Store" -x "__MACOSX/*" -x ".git/*" -x ".gitignore" -x "node_modules/*"
+```
+
+CRITICAL:
+- `cd` INTO the plugin directory first, then zip `.` — never zip the parent folder
+- Use `.plugin` extension, not `.zip`
+- Verify: `unzip -l /tmp/PLUGIN_NAME.plugin | head -20` — `.claude-plugin/plugin.json` must be at the zip root
+
+## Step 5: Report Results
+
+Tell the user: skill count, issues fixed, warnings, output location.
+
+If the user only wanted a .plugin file, stop here.
+
+## Step 6: Set Up GitHub Marketplace
+
+If the user wants GitHub distribution with auto-updates, the repo needs a **marketplace wrapper** around the plugin.
+
+### Required repo structure
+
+```
+repo-root/                               ← this is the MARKETPLACE
+├── .claude-plugin/
+│   └── marketplace.json                 ← ONLY marketplace.json here
+├── plugins/
+│   └── plugin-name/                     ← the PLUGIN lives in a subdirectory
+│       ├── .claude-plugin/
+│       │   └── plugin.json              ← plugin manifest here
+│       ├── skills/
+│       │   └── ...
+│       └── README.md
+└── README.md                            ← marketplace-level readme
+```
+
+Key rules from the official docs (https://code.claude.com/docs/en/plugin-marketplaces):
+- The marketplace `.claude-plugin/` ONLY contains `marketplace.json` — never put `plugin.json` here
+- The plugin MUST live in a subdirectory (e.g., `./plugins/plugin-name/`)
+- The plugin subdirectory has its OWN `.claude-plugin/plugin.json`
+- `"source": "."` does NOT work — the plugin cannot self-reference
+- Relative paths resolve from the marketplace root (the directory containing `.claude-plugin/`), not from inside `.claude-plugin/`
+
+### marketplace.json format
+
+```json
+{
+  "name": "marketplace-name",
+  "owner": {
+    "name": "Author Name",
+    "email": "author@example.com"
+  },
+  "plugins": [
+    {
+      "name": "plugin-name",
+      "source": "./plugins/plugin-name",
+      "description": "What the plugin does",
+      "version": "1.0.0"
+    }
+  ]
+}
+```
+
+Required marketplace fields: `name`, `owner` (with `name`), `plugins` array.
+Required per-plugin fields: `name`, `source`.
+Optional per-plugin: `description`, `version`, `author`, `homepage`, `category`, `tags`.
+
+The `source` field can be:
+- A relative path string starting with `./` (for plugins in the same repo)
+- An object with `"source": "github", "repo": "owner/repo"` (for plugins in other repos)
+- An object with `"source": "url", "url": "https://..."` (for git URLs)
+
+### Validate the marketplace
+
+```bash
 claude plugin validate .
 ```
 
-This catches schema errors in plugin.json/marketplace.json and frontmatter issues. Fix everything before packaging.
+This validates the marketplace AND all plugins within it.
 
-## Step 5: Package as .plugin File (Zip Upload Path Only)
+### How users install
 
-**CRITICAL:** `cd` INTO the plugin directory first. Never zip from the parent folder.
+```
+# In Claude Code CLI:
+/plugin marketplace add owner/repo
+/plugin install plugin-name@marketplace-name
 
-```bash
-cd /path/to/plugin
-zip -r /tmp/plugin-name.plugin . \
-  -x "*.DS_Store" \
-  -x "__MACOSX/*" \
-  -x ".git/*" \
-  -x ".gitignore" \
-  -x "node_modules/*"
-cp /tmp/plugin-name.plugin ~/Desktop/plugin-name.plugin
+# In Cowork desktop:
+Settings → Add marketplace → https://github.com/owner/repo
 ```
 
-Use `.plugin` extension, not `.zip`.
+## Common Mistakes Reference
 
-## Step 6: Verify
-
-```bash
-# For zip uploads — check plugin.json at root
-unzip -l ~/Desktop/plugin-name.plugin | grep "plugin.json"
-
-# For GitHub — check marketplace.json at root, plugin.json in subdirectory
-cat .claude-plugin/marketplace.json
-cat plugins/my-plugin/.claude-plugin/plugin.json
-```
-
-Report: skill count, issues fixed, warnings, output location.
-
-## Install Methods
-
-**CoWork (zip upload):** Click "+" next to Personal Plugins > upload the .plugin file
-
-**CoWork (GitHub marketplace):** Click "+" > Add marketplace > `owner/repo` — requires marketplace.json at repo root with plugin in subdirectory
-
-**CLI:** `claude --plugin-dir /path/to/plugin` (session-only) or `claude plugin marketplace add owner/repo` (permanent)
+See `references/common-mistakes.md` for a catalog of real-world pitfalls.
+See `references/plugin-structure.md` for the complete structural reference.

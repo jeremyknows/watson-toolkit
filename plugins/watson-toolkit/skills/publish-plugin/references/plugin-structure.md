@@ -1,114 +1,173 @@
-# Plugin Structure Reference
+# Plugin & Marketplace Structure Reference
 
-## Canonical Layout
+Source: https://code.claude.com/docs/en/plugin-marketplaces and https://code.claude.com/docs/en/plugins
+
+## Plugin Structure (standalone)
+
+A plugin is a self-contained directory with skills, agents, hooks, and/or MCP servers.
 
 ```
 plugin-name/
 ├── .claude-plugin/
-│   └── plugin.json              ← REQUIRED (only file in this dir)
+│   └── plugin.json              ← REQUIRED (plugin manifest)
 ├── skills/
 │   └── skill-name/
-│       ├── SKILL.md             ← REQUIRED per skill
-│       └── references/          ← optional supporting docs
-├── commands/                    ← optional slash commands
-│   └── command-name.md
-├── agents/                      ← optional sub-agents
+│       ├── SKILL.md             ← REQUIRED (per skill)
+│       └── references/          ← optional detailed docs
+│           └── guide.md
+├── agents/                      ← optional
 │   └── agent-name.md
-├── .mcp.json                    ← optional MCP server connections
-├── hooks/                       ← optional event handlers
+├── hooks/                       ← optional
 │   └── hooks.json
-├── settings.json                ← optional default settings
-├── README.md                    ← recommended
-└── LICENSE                      ← recommended for public plugins
+├── .mcp.json                    ← optional (MCP server configs)
+└── README.md                    ← recommended
 ```
 
-**Critical rule:** `skills/`, `commands/`, `agents/`, `hooks/` must be at the plugin root. Only `plugin.json` goes inside `.claude-plugin/`.
+## Marketplace Structure (for GitHub distribution)
+
+A marketplace is a catalog that lists plugins. The plugin lives in a SUBDIRECTORY.
+
+```
+repo-root/                               ← MARKETPLACE
+├── .claude-plugin/
+│   └── marketplace.json                 ← marketplace manifest ONLY
+├── plugins/
+│   └── plugin-name/                     ← PLUGIN in subdirectory
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       ├── skills/
+│       │   └── ...
+│       └── README.md
+└── README.md
+```
+
+CRITICAL: marketplace.json and plugin.json NEVER go in the same `.claude-plugin/` directory.
 
 ## plugin.json Schema
 
 ```json
 {
-  "name": "my-plugin",
-  "description": "What this plugin does in one sentence.",
+  "name": "kebab-case-name",
+  "description": "What it does",
   "version": "1.0.0",
   "author": {
-    "name": "Your Name",
-    "email": "you@example.com"
+    "name": "Author Name",
+    "email": "email@example.com"
   },
-  "keywords": ["keyword1", "keyword2"]
+  "keywords": ["tag1", "tag2"]
 }
 ```
 
-| Field | Required | Rules |
-|-------|----------|-------|
-| `name` | Yes | Kebab-case, lowercase, max 64 chars |
-| `description` | No | String, recommended |
-| `version` | No | Semver format |
-| `author` | No | Must be object `{"name": "..."}`, NOT a string |
-| `keywords` | No | Array of strings |
-| `hooks` | No | Path to hooks.json |
-| `mcpServers` | No | Path to .mcp.json |
+Required: `name`, `description`, `version`.
+Optional: `author`, `keywords`, `homepage`, `repository`, `license`.
 
-**Keys that will FAIL validation:** `display_name`, `homepage`, `repository`, `license` (as top-level key).
+## marketplace.json Schema
 
-## SKILL.md Frontmatter Schema
+```json
+{
+  "name": "marketplace-name",
+  "owner": {
+    "name": "Maintainer Name",
+    "email": "email@example.com"
+  },
+  "metadata": {
+    "description": "Brief marketplace description"
+  },
+  "plugins": [
+    {
+      "name": "plugin-name",
+      "source": "./plugins/plugin-name",
+      "description": "What the plugin does",
+      "version": "1.0.0",
+      "homepage": "https://github.com/owner/repo"
+    }
+  ]
+}
+```
+
+Required: `name`, `owner` (with `name`), `plugins` array.
+Required per plugin: `name`, `source`.
+Optional per plugin: `description`, `version`, `author`, `homepage`, `category`, `tags`.
+
+### Plugin Source Formats
+
+Relative path (same repo):
+```json
+{ "source": "./plugins/my-plugin" }
+```
+
+GitHub repo (different repo):
+```json
+{ "source": { "source": "github", "repo": "owner/repo" } }
+```
+
+Git URL:
+```json
+{ "source": { "source": "url", "url": "https://gitlab.com/team/plugin.git" } }
+```
+
+Git subdirectory:
+```json
+{ "source": { "source": "git-subdir", "url": "owner/monorepo", "path": "plugins/my-plugin" } }
+```
+
+npm package:
+```json
+{ "source": { "source": "npm", "package": "@org/plugin" } }
+```
+
+All object sources support optional `ref` (branch/tag) and `sha` (commit hash) for pinning.
+
+### Path Resolution
+
+From the official docs: "Paths resolve relative to the marketplace root, which is the directory containing `.claude-plugin/`. In the example above, `./plugins/my-plugin` points to `<repo>/plugins/my-plugin`, even though `marketplace.json` lives at `<repo>/.claude-plugin/marketplace.json`. Do not use `../` to climb out of `.claude-plugin/`."
+
+## SKILL.md Schema
 
 ```yaml
 ---
 name: skill-name
 description: >
-  What this skill does and when to trigger it. Include specific phrases
-  the user might say. Claude sees ONLY name + description (~100 tokens)
-  to decide whether to load the full skill.
+  This skill should be used when the user asks to "do X", "do Y",
+  or needs help with Z.
+metadata:
+  version: "0.1.0"
 ---
+
+# Skill Title
+
+Imperative instructions for Claude go here.
 ```
 
-| Field | Required | Rules |
-|-------|----------|-------|
-| `name` | No | Kebab-case, should match directory name |
-| `description` | Recommended | Trigger-focused, specific phrases |
-| `disable-model-invocation` | No | Boolean, prevents auto-trigger |
-| `user-invocable` | No | Boolean |
-| `allowed-tools` | No | Comma-separated tool names |
-| `model` | No | Model override (sonnet, opus, haiku) |
-| `effort` | No | low, medium, high, max |
-| `context` | No | "fork" for subagent execution |
-| `shell` | No | bash or powershell |
-| `argument-hint` | No | Placeholder text for arguments |
-
-**Fields that will FAIL validation:** `version`, `license`, `author`, `tags`, `taxonomy_category`, `health_score`, `status`, `metadata`, `homepage`, `repository`, `last_improved`
+Required frontmatter: `name` (must match directory name), `description`.
+Optional: `metadata`, `disable-model-invocation`.
 
 ## Naming Rules
 
-- **Everything is kebab-case:** plugin name, skill directory names, skill names in frontmatter
-- **Directory name = skill name:** `skills/my-skill/SKILL.md` should have `name: my-skill`
-- **No spaces, no underscores, no camelCase**
+- Plugin name: kebab-case (`my-plugin`)
+- Marketplace name: kebab-case (`my-marketplace`)
+- Skill directory name: kebab-case, must match frontmatter `name`
+- Agent file name: kebab-case with `.md` extension
+- Version: semver (`MAJOR.MINOR.PATCH`)
 
 ## Progressive Disclosure
 
-Claude loads content in stages to minimize token usage:
+1. **Description** (~100 words) — always loaded, used for skill matching
+2. **SKILL.md body** (<2,000 words) — loaded when skill triggers
+3. **references/** (unlimited) — loaded on demand
 
-1. **Always loaded:** Skill name + description (~100 tokens per skill)
-2. **Loaded on trigger:** Full SKILL.md body (<2,000 words recommended)
-3. **Loaded on demand:** Reference files in `references/` (unlimited size)
-
-Guidelines:
-- Description: ~100 words, trigger-focused
-- SKILL.md body: <2,000 words, instructions and workflow
-- References: unlimited, factual data and detailed specs
-
-## Size Guidelines
-
-- Total plugin: <5 MB recommended
-- Individual SKILL.md: <50 KB
-- Font files, images: minimize or exclude if not essential
-- Scripts: include only what the skill actively calls
-
-## Version Bumping
-
-**Every change requires a version bump in plugin.json.** CoWork caches by version number. No bump = update never reaches users.
+## Installation Commands
 
 ```bash
-# Before: "version": "1.0.0"
-# After:  "version": "1.0.1"
+# Add a marketplace from GitHub
+/plugin marketplace add owner/repo
+
+# Install a plugin from a marketplace
+/plugin install plugin-name@marketplace-name
+
+# Validate a marketplace
+claude plugin validate .
+
+# Validate a plugin
+claude plugin validate .claude-plugin/plugin.json
 ```
