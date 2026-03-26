@@ -1,0 +1,17 @@
+{
+  "name": "watson-toolkit",
+  "owner": {
+    "name": "Jeremy Jannielli",
+    "email": "jeremy@veefriends.com"
+  },
+  "metadata": {
+    "description": "Jeremy's full skill suite for Claude CoWork"
+  },
+  "plugins": [
+    {
+      "name": "watson-toolkit",
+      "source": ".",
+      "description": "33 skills for research, writing, dev, planning, design, and documents"
+    }
+  ]
+}
