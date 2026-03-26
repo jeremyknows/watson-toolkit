@@ -99,4 +99,4 @@ watson-toolkit/
 
 ## License
 
-Private. Not for distribution.
+MIT. Bundled third-party skills retain their original licenses. See [LICENSE](../../LICENSE) for details.
