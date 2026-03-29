@@ -1,5 +1,6 @@
 ---
 name: brainstorming
+version: 2.0.0
 description: >
   Use before any creative work — creating features, building components, adding
   functionality, or modifying behavior. Explores user intent, requirements, and
@@ -8,6 +9,11 @@ description: >
   NOT FOR: debugging known bugs (use systematic-debugging), writing implementation
   plans (use writing-plans), executing existing plans (use executing-plans),
   trivial one-liner changes where design is obvious.
+taxonomy_category: Code Scaffolding
+health_score: 11/14
+last_improved: 2026-03-19
+author: jeremyknows
+license: MIT
 ---
 
 # Brainstorming Ideas Into Designs
@@ -153,9 +159,11 @@ A question about a UI topic is not automatically visual. "What does personality 
 
 ## Dependencies
 
+- `sessions_spawn` — spec-document-reviewer dispatch (isolated session)
 - `writing-plans` skill — mandatory next step after spec approval
 - `git` — spec must be committed before review loop runs
 - `canvas` tool — optional, for visual companion browser integration
+- `sub-agent-complete.sh` — emit completion event on spec approval
 
 ---
 

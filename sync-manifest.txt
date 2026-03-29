@@ -1,0 +1,83 @@
+# Watson Toolkit Sync Manifest
+# ============================
+# One skill per line. Lines starting with # are comments.
+# Prefix: "oc:" = OpenClaw source (default), "cc:" = Claude Code source
+# OpenClaw (~/.openclaw/skills/) is the primary source of truth.
+#
+# To add a new skill: add a line here, then run ./sync-watson-toolkit.sh --apply
+
+# ─── ALREADY IN TOOLKIT (22 from OpenClaw) ───
+oc:brainstorming
+oc:deep-research
+oc:frontend-design
+oc:grill-me
+oc:humanizer
+oc:improve-codebase-architecture
+oc:intellectual-honesty
+oc:jackbutcher-voice
+oc:make-interfaces-feel-better
+oc:markdown-fetch
+oc:playground
+oc:prd-to-issues
+oc:prism
+oc:proposal-maker
+oc:publish-skills
+oc:receiving-feedback
+oc:skill-doctor
+oc:systematic-debugging
+oc:ubiquitous-language
+oc:write-a-prd
+oc:writing-plans
+oc:x-master
+
+# ─── ALREADY IN TOOLKIT (6 from CC only) ───
+cc:autoresearch
+cc:canvas-design
+cc:doc-coauthoring
+cc:plan-review
+cc:skill-creator
+cc:web-artifacts-builder
+
+# ─── ALREADY IN TOOLKIT (toolkit-only, no local source — skip sync) ───
+# These exist only in the toolkit repo and have no local source.
+# The sync script will report them as "not in manifest" but won't delete them.
+# docx, pdf, pptx, xlsx, publish-plugin
+
+# ─── NEW: PROMOTE FROM OPENCLAW ───
+oc:build-feature
+oc:commit-commands
+oc:complete-code-review
+oc:feature-dev
+oc:librarian
+oc:openai-image-gen
+oc:sprint
+oc:subagent-driven-development
+oc:test-driven-development
+oc:verification-before-completion
+# NOTE: last30days-skill is a duplicate of last30days (already in toolkit)
+# NOTE: dashboard-metric-discrepancy-debugging — review if general enough
+
+# ─── NEW: PROMOTE FROM CC ───
+cc:claude-context-audit
+cc:claudeception
+cc:retro
+cc:x-research-skill
+# NOTE: ops-health-check, network-outage-cascade-recovery, supabase-skill-creator
+#   — review if general enough before uncommenting
+# cc:ops-health-check
+# cc:network-outage-cascade-recovery
+# cc:supabase-skill-creator
+
+# ─── X/TWITTER TOOLS ───
+oc:x-engage
+oc:x-fetch
+oc:x-research-skill
+
+# ─── EXCLUDED (do not add) ───
+# VeeFriends skills → separate plugin
+# OpenClaw infra: dispatch-message, dispatching-parallel-agents, emergency-commands,
+#   executing-plans, restart-mc, unified-feature-dev, v2-*, wcc, unified-commands
+# Crypto/blockchain (symlinked, most broken): coingecko, helius, eth-readonly, etc.
+# CC-only debugging: openclaw-*, remotion-best-practices, polymarket-trading
+# Project-specific: fal-ai-community, grok-1.0.3, mirofish, miroprism, nano-banana-pro
+# Stale: build-feature.bak-2026-03-18, jeremyknows.md

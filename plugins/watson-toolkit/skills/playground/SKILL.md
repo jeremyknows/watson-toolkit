@@ -22,7 +22,7 @@ When the user asks for an interactive playground, explorer, or visual tool for a
    - `templates/diff-review.md` — Code review (git diffs, commits, PRs with line-by-line commenting)
    - `templates/code-map.md` — Codebase architecture (component relationships, data flow, layer diagrams)
 3. **Follow the template** to build the playground. If the topic doesn't fit any template cleanly, use the one closest and adapt.
-4. **Open in browser.** After writing the HTML file, run `open <filename>.html` to launch it in the user's default browser.
+4. **Deliver to user.** After writing the HTML file, open it for the user (Claude Code: `open <filename>.html`; Cowork: share via the outputs panel).
 
 ## Core requirements (every playground)
 

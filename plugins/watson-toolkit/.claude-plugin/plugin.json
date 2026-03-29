@@ -1,10 +1,10 @@
 {
   "name": "watson-toolkit",
-  "description": "Jeremy's full skill suite — research, writing, dev, planning, design, and document creation. 35 skills bundled for Claude CoWork.",
-  "version": "1.4.0",
+  "description": "19 skills for rigorous thinking, honest feedback, research, code review, and creative work. Works in Claude Code and Cowork.",
+  "version": "1.5.0",
   "author": {
     "name": "Jeremy Jannielli",
     "email": "jeremy@veefriends.com"
   },
-  "keywords": ["productivity", "research", "writing", "dev", "planning", "design", "documents"]
+  "keywords": ["productivity", "research", "writing", "code-review", "anti-sycophancy", "planning", "decision-making"]
 }

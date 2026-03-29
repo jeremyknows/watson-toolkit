@@ -6,6 +6,10 @@ description: |
   skill just completed and produced a spec, or asked to "write a plan for" something.
   NOT FOR: single-file edits, bug fixes with known root cause (use systematic-debugging),
   exploratory prototypes, or tasks that don't require coordination across multiple files.
+version: 2.2.0
+taxonomy_category: Code Scaffolding
+health_score: 11/14
+last_improved: 2026-03-19
 ---
 
 # Writing Plans

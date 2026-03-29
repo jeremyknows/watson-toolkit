@@ -1,5 +1,6 @@
 ---
 name: receiving-feedback
+version: 2.0.0
 description: >
   Use when receiving feedback on completed or in-progress work — before
   implementing any suggestion, correction, or review comment. Triggers on:
@@ -7,6 +8,11 @@ description: >
   external source suggestions, multi-item fix lists.
   NOT FOR: initial task intake (no feedback loop yet), clarifying questions
   before you've produced any work, or your own self-review (use complete-code-review).
+taxonomy_category: Code Quality & Review
+health_score: 11/14
+last_improved: 2026-03-19
+author: jeremyknows
+license: MIT
 ---
 
 # Receiving Feedback
