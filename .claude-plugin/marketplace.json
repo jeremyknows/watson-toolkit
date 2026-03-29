@@ -5,14 +5,14 @@
     "email": "jeremy@veefriends.com"
   },
   "metadata": {
-    "description": "Jeremy's full skill suite for Claude CoWork"
+    "description": "19 skills for rigorous thinking, honest feedback, research, code review, and creative work"
   },
   "plugins": [
     {
       "name": "watson-toolkit",
       "source": "./plugins/watson-toolkit",
-      "description": "35 skills for research, writing, dev, planning, design, and documents",
-      "version": "1.4.0",
+      "description": "19 skills for rigorous thinking, honest feedback, research, code review, and creative work",
+      "version": "1.5.0",
       "author": {
         "name": "Jeremy Jannielli",
         "email": "jeremy@veefriends.com"
