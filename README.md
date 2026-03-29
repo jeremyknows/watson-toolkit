@@ -9,7 +9,12 @@ Works in **Claude Code** and **Cowork**.
 **Cowork:**
 Settings > Add marketplace > `https://github.com/jeremyknows/watson-toolkit`
 
-**Claude Code:**
+**Claude Code (npx — recommended):**
+```bash
+npx watson-toolkit
+```
+
+**Claude Code (marketplace):**
 ```bash
 /plugin marketplace add jeremyknows/watson-toolkit
 /plugin install watson-toolkit@watson-toolkit

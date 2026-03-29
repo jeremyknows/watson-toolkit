@@ -9,7 +9,10 @@ status: GA
 last_improved: 2026-03-18
 metadata:
   author: jeremyknows
+compatibility: "Claude Code or OpenClaw (requires parallel subagent support)"
 ---
+
+> ⚠️ **Runtime requirement:** This skill uses parallel subagent fan-out for PRISM reviews. Requires Claude Code or OpenClaw. Not compatible with Cowork (sequential fallback coming in a future version).
 
 # Skill Doctor 🩺
 

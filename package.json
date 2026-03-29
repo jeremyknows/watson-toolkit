@@ -1,0 +1,36 @@
+{
+  "name": "watson-toolkit",
+  "version": "1.5.0",
+  "description": "19 skills for rigorous thinking, honest feedback, research, and creative work. Install into Claude Code with one command.",
+  "bin": {
+    "watson-toolkit": "./bin/install.js"
+  },
+  "files": [
+    "bin/",
+    "plugins/watson-toolkit/skills/"
+  ],
+  "keywords": [
+    "claude",
+    "claude-code",
+    "skills",
+    "toolkit",
+    "ai",
+    "anthropic",
+    "productivity",
+    "code-review",
+    "anti-sycophancy"
+  ],
+  "author": {
+    "name": "Jeremy Jannielli",
+    "email": "jeremy@veefriends.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeremyknows/watson-toolkit"
+  },
+  "homepage": "https://github.com/jeremyknows/watson-toolkit#readme",
+  "engines": {
+    "node": ">=16"
+  }
+}
