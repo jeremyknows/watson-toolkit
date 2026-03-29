@@ -9,10 +9,10 @@ status: GA
 last_improved: 2026-03-18
 metadata:
   author: jeremyknows
-compatibility: "Claude Code or OpenClaw (requires parallel subagent support)"
+compatibility: "Claude Code, Cowork, or OpenClaw (PRISM review uses sub-agents; Cowork runs reviewers sequentially)"
 ---
 
-> ⚠️ **Runtime requirement:** This skill uses parallel subagent fan-out for PRISM reviews. Requires Claude Code or OpenClaw. Not compatible with Cowork (sequential fallback coming in a future version).
+> **Runtime note:** PRISM review (Phase 2) dispatches 9 reviewer sub-agents. In CC/OpenClaw these run in parallel; in Cowork they run sequentially (same results, longer wall-clock time). All other phases work identically across runtimes.
 
 # Skill Doctor 🩺
 
@@ -28,7 +28,7 @@ Diagnose what's wrong with a skill. Prescribe fixes. Verify they worked.
 - `scripts/prism-setup.sh` — Scaffolding: validates input, finds skill, scans for secrets, creates run dir, outputs JSON config with all 9 reviewer paths
 - `scripts/prism-summary.sh` — Aggregation: reads `*-raw.txt` files + prior brief, builds SUMMARY.md (synthesis agent reads raw files directly)
 
-**Architecture:** LLM reviewer fan-out uses `sessions_spawn` (isolated sessions, no lock contention). Bash handles only deterministic work. See Phase 2 for protocol.
+**Architecture:** LLM reviewer fan-out uses sub-agents (Agent tool in Cowork/CC, sessions_spawn in OpenClaw). Bash handles only deterministic work. See Phase 2 for protocol.
 
 ---
 
@@ -78,11 +78,10 @@ Skills get full agent permissions — filesystem, credentials, browser, messagin
 - Host: GitHub only (not raw pastebin, unknown CDNs, DMs)
 - Author: check account age, prior skills, stars/forks on repo
 - CVE check: `grep -i "cve\|vulnerability\|exploit" <skill-repo>/README.md`
-- Blocklist check: `grep -i "<skill-name>" ~/.skill-doctor/blocklist 2>/dev/null` (OC: `~/.openclaw/skills/.blocklist`)
+- Blocklist check: `grep -i "<skill-name>" ~/.skill-doctor/blocklist 2>/dev/null`
 
-**Step 2 — VirusTotal Check (MANDATORY for ClawHub skills):**
-- ClawHub pages show VT grade automatically — any flag = stop, do not install
-- For non-ClawHub: scan primary files manually at virustotal.com
+**Step 2 — VirusTotal Check:**
+- Scan primary files at virustotal.com
 - Any positive flag = reject, no exceptions
 
 **Step 3 — Code Review (read SKILL.md + scripts/):**
@@ -106,7 +105,7 @@ Check for:
 4. Author account < 30 days with no other public skills
 5. Typosquatting (name differs from known skill by 1-2 chars)
 6. Unknown domain in network calls not explained in README
-7. On blocklist at `~/.skill-doctor/blocklist` (OC: `~/.openclaw/skills/.blocklist`)
+7. On blocklist at `~/.skill-doctor/blocklist`
 8. Permission scope massively exceeds stated purpose
 9. No source code — binary-only distribution
 
@@ -125,7 +124,7 @@ Conditions (if any): <list>
 
 **Step 7 — Install only after Jeremy explicit approval.** Present the vetting report, wait for confirmation. If sandbox mode is available, test there first.
 
-**Reference:** Full protocol at `docs/knowledge/skills/skill-security-vetting-protocol.md` *(OpenClaw workspace — skip if not present)*
+**Reference:** See `references/openclaw.md` for OpenClaw-specific paths and integration details.
 
 ---
 
@@ -192,28 +191,28 @@ echo "$PRISM_CONFIG"
 **Step 2 — Phase A: Prior Brief Compiler + DA (parallel, both blind):**
 - Prior Brief Compiler (`00-prior-brief-compiler.md`):
   - Inject `{{SKILL_NAME}}`, `{{RUN_DIR}}`, `{{ARCHIVE_DIR}}`
-  - Spawn: `sessions_spawn(task=..., mode="run", runTimeoutSeconds=90)`
+  - Spawn as sub-agent (timeout: 90s)
   - Writes to: `$RUN_DIR/prior-findings-brief.md`
 - DA (`01-da.md`):
   - Inject `{{SKILL_NAME}}`, `{{SKILL_PATH}}`, `{{RUN_DIR}}` only
   - **Do NOT inject `{{DA_FINDINGS}}`** — DA is blind, the template does not use that variable
-  - Spawn: `sessions_spawn(task=..., mode="run", runTimeoutSeconds=120)`
+  - Spawn as sub-agent (timeout: 120s)
   - Writes to: `$RUN_DIR/devil-advocate-raw.txt`
 - Wait for both before proceeding to Phase B.
 
-**Step 3 — Phase B: 5 reviewers in parallel (with DA findings + prior brief):**
+**Step 3 — Phase B: 5 reviewers (with DA findings + prior brief):**
 - For each template `02-security.md` … `06-blast.md`:
   - Inject `{{SKILL_NAME}}`, `{{SKILL_PATH}}`, `{{RUN_DIR}}`
   - Inject `{{DA_FINDINGS}}` = first 2000 chars of `devil-advocate-raw.txt`
   - Inject `{{PRIOR_BRIEF}}` = content of `prior-findings-brief.md` if it exists (cap at 3000 chars)
-  - Spawn all 5 via `sessions_spawn` simultaneously (not sequential)
+  - Spawn all 5 as sub-agents (in parallel where runtime supports it; sequentially in Cowork)
   - Each writes to `$RUN_DIR/<role>-raw.txt`
 - Wait for all 5 before proceeding to Phase C.
-- Timeout policy: if an agent hasn't written output within 90s, log `REVIEWER_TIMEOUT` and continue. A 4/5 result is valid.
+- Timeout policy: if a reviewer hasn't written output within 90s, log `REVIEWER_TIMEOUT` and continue. A 4/5 result is valid.
 
 **Step 4 — Phase C: Contrarian (after B consensus is visible):**
 - Inject `{{SKILL_NAME}}`, `{{SKILL_PATH}}`, `{{RUN_DIR}}`
-- Spawn: `sessions_spawn(task=..., mode="run", runTimeoutSeconds=120)`
+- Spawn as sub-agent (timeout: 120s)
 - Writes to: `$RUN_DIR/contrarian-raw.txt`
 - If Contrarian times out: skip it; synthesis agent will note "Contrarian not available".
 
@@ -225,13 +224,10 @@ bash ./scripts/prism-summary.sh "$RUN_DIR" "<skill-name>"
 
 **Step 6 — Phase D: Synthesis Agent:**
 - Inject `{{SKILL_NAME}}`, `{{RUN_DIR}}`
-- Spawn: `sessions_spawn(task=..., mode="run", runTimeoutSeconds=180)`
+- Spawn as sub-agent (timeout: 180s)
 - Reads all `*-raw.txt` files + `prior-findings-brief.md` directly
 - Writes structured `$RUN_DIR/synthesis.md`
 - Read `synthesis.md` to proceed to Phase 3 (Prescribe).
-
-**Why `sessions_spawn` not `openclaw agent --local`:**
-`openclaw agent --local --agent main` serializes on the main session file — concurrent calls deadlock. `sessions_spawn` creates isolated sessions with independent file paths. No lock contention, proper parallel execution.
 
 **Round 2:** New run dir via setup. DA is NOT re-run — copy `devil-advocate-raw.txt` from Round 1 into the new run dir. Re-run Phase B–D only. Prior Brief Compiler re-runs (it will see Round 1's run directory, which was created by `prism-setup.sh` inside the archive path and contains `synthesis.md` — this counts as a prior review even before Phase 6 archiving).
 
@@ -302,7 +298,7 @@ For each condition:
 | No Autoresearch section | Add from template in `references/autoresearch-scorecard-template.md` |
 | File > 500 lines | Extract spawn templates, examples, or long reference tables to `references/` |
 | Stale skill name references | `grep -rn "[old-name]" <your-workspace>/ 2>/dev/null \| grep -v ".git"` |
-| Broken sessions_spawn params | Remove `model=`, `max_depth=`, `timeout_minutes=` — these are not valid API params |
+| Broken sub-agent params | Check runtime docs for valid params — common mistake: passing `model=` or `timeout_minutes=` as spawn args instead of in the task prompt |
 | "Iron Law" / railroading | Soften to principle-based language; replace NEVER with conditional guidance where appropriate |
 
 **Progressive disclosure decision:**
@@ -346,28 +342,24 @@ Post the before/after score table.
 
 Write PRISM archive to:
 `~/.skill-doctor/archive/[skill-name]/[date]-review.md`
-*(OC: `~/.openclaw/agents/main/workspace/analysis/prism/archive/[skill-name]/[date]-review.md`)*
 
 Archive format: see `references/archive-template.md`.
 
-Update your skill health log with the new score and date *(OC: `docs/knowledge/skills/SKILL-HEALTH-SCORES.md`)*.
+Update your skill health log with the new score and date.
+
+See `references/openclaw.md` for OpenClaw-specific archive paths and health log locations.
 
 ## Phase 6b: Stalled Condition Detection (if prior audits exist)
 
 ```bash
 # Check for prior archives on this skill
 ls ~/.skill-doctor/archive/[skill-name]/
-# (OC: ls ~/.openclaw/agents/main/workspace/analysis/prism/archive/[skill-name]/)
 ```
 
 For each Tier 1 condition in this audit:
 1. Check if it was flagged in prior archives (grep the condition name)
 2. If flagged in ≥2 prior audits → mark as **STALLED** in this archive
-3. STALLED conditions → emit bus event:
-   ```bash
-   # OpenClaw: bash ~/.openclaw/scripts/emit-event.sh agent task_stalled "[skill-name]: [condition summary]" "" "skills"
-   # Other runtimes: log the stalled condition to your task tracker or notify manually
-   ```
+3. STALLED conditions → log to your task tracker or notify the skill owner
 
 Jeremy reviews stalled conditions at next session and decides: fix, defer permanently, or close as won't-fix.
 
@@ -396,25 +388,22 @@ publish-skills covers: frontmatter spec compliance, LICENSE.txt, README patterns
 - **Synthesis Agent output is advisory.** Read `synthesis.md` critically — it applies its tiering rules mechanically. If a condition is mistiered, correct it in Phase 3 before presenting to Jeremy.
 - **Round 2 is only valuable if Round 1 conditions changed the structure.** If fixes were cosmetic (wording, typos), skip Round 2.
 - **Stale references are more common than they look.** Always run the blast radius grep before calling a rename done.
-- **Know where your live skills dir is.** OpenClaw: `~/.openclaw/skills/` (npm-installed skills at `~/.npm-global/` are read-only — override by copying to skills dir). Claude Code: `~/.claude/skills/`. Confirm path before writing.
-- **sessions_spawn params**: `model=`, `max_depth=`, `timeout_minutes=` are NOT valid. Model selection goes in the task prompt body.
+- **Know where your live skills dir is.** Claude Code: `~/.claude/skills/`. Cowork: managed via marketplace plugin. Confirm path before writing. See `references/openclaw.md` for OpenClaw paths.
+- **Sub-agent params vary by runtime.** Model selection always goes in the task prompt body, not as a spawn parameter. See `references/openclaw.md` for OpenClaw-specific param gotchas.
 - **Autoresearch baselines are only meaningful if generated consistently.** Run 3–5 real outputs, not synthetic examples.
 
 ---
 
 ## Dependencies
 
-- `sessions_spawn` — PRISM parallel reviewer dispatch
-- GNU `timeout` (coreutils) — **Not used by current scripts** but required if you run any reviewer subcommands via bare `timeout` wrapper. Install: `brew install coreutils`. Not strictly required for Watson-driven `sessions_spawn` fan-out.
-- `prism` skill — Full PRISM protocol details (if needed beyond this skill's templates)
-- `complete-code-review` skill — For software code review; this skill is for skill files only
-- `skill-creator` skill — For creating new skills from scratch; this skill improves existing ones
-- `publish-skills` skill — For publishing to GitHub after improvement
-- `docs/knowledge/skills/AUTORESEARCH-MASTER.md` — Full autoresearch loop spec *(OpenClaw workspace)*
-- `docs/knowledge/skills/SKILLS-INVENTORY.md` — Skill catalogue with health scores *(OpenClaw workspace)*
-- `docs/knowledge/skills/SKILL-HEALTH-SCORES.md` — Audit results log *(OpenClaw workspace)*
-- `bash ~/.openclaw/scripts/sub-agent-complete.sh` — Phase 6 bus emission *(OpenClaw only, optional)*
-- `bash ~/.openclaw/scripts/emit-event.sh` — Phase 6b stalled condition detection *(OpenClaw only, optional)*
+| Dependency | Purpose | Runtime |
+|------------|---------|---------|
+| Sub-agent capability | PRISM parallel reviewer dispatch | Agent tool (Cowork/CC), sessions_spawn (OpenClaw) |
+| `prism` skill | Full PRISM protocol details (if needed beyond templates) | All |
+| `complete-code-review` skill | For software code review (this skill is for skill files only) | All |
+| `skill-creator` skill | For creating new skills from scratch (this skill improves existing ones) | All |
+| `publish-skills` skill | For publishing to GitHub after improvement | All |
+| `references/openclaw.md` | OpenClaw-specific paths, spawn syntax, bus events | OpenClaw only |
 
 ---
 
