@@ -3,7 +3,7 @@
   "version": "1.5.0",
   "description": "19 skills for rigorous thinking, honest feedback, research, and creative work. Install into Claude Code with one command.",
   "bin": {
-    "watson-toolkit": "./bin/install.js"
+    "watson-toolkit": "bin/install.js"
   },
   "files": [
     "bin/",
@@ -27,7 +27,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jeremyknows/watson-toolkit"
+    "url": "git+https://github.com/jeremyknows/watson-toolkit.git"
   },
   "homepage": "https://github.com/jeremyknows/watson-toolkit#readme",
   "engines": {

@@ -1,0 +1,7 @@
+.git
+.gitignore
+*.bak
+sync-watson-toolkit.sh
+sync-github-skills.sh
+sync-manifest.txt
+HANDOFF*.md
