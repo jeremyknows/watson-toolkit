@@ -51,19 +51,6 @@ Watson Toolkit builds on the work of some great open-source skills projects:
 
 Skills that have been modified retain their original licenses. See individual skill directories for details.
 
-## Sync Model
-
-The toolkit is a curated snapshot. Skills are sourced from:
-
-| Source | Skills |
-|--------|--------|
-| GitHub repos (jeremyknows/) | `complete-code-review`, `decide`, `prism`, `publish-skills`, `random-thought`, `skill-doctor`, `x-fetch` |
-| OpenClaw (`~/.openclaw/skills/`) | `brainstorming`, `grill-me`, `humanizer`, `intellectual-honesty`, `playground`, `receiving-feedback` |
-| Claude Code (`~/.claude/skills/`) | `autoresearch`, `doc-coauthoring`, `plan-review`, `systematic-debugging`, `writing-plans` |
-| Toolkit-only | `publish-plugin` |
-
-To update: see `sync-watson-toolkit.sh` at repo root.
-
 ## License
 
 MIT. See [LICENSE](./LICENSE). Bundled third-party skills retain their original licenses.
