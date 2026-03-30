@@ -78,8 +78,8 @@ If the sync script errors with "subpath not found", the upstream repo reorganize
 | `brainstorming` | 197 | 164 | +33 — added frontmatter (taxonomy, health_score), HARD-GATE block, OC-specific deps section |
 | `systematic-debugging` | 197 | 296 | -99 — we have an older snapshot; upstream grew significantly after our clone |
 | `writing-plans` | 214 | 152 | +62 — added content specific to our workflow |
-| `receiving-feedback` | 285 | n/a | Not in upstream (upstream has `receiving-code-review`, different skill) |
-| `intellectual-honesty` | 112 | n/a | Not in upstream at all — original work, inspired by superpowers style |
+| `receiving-feedback` | 285 | n/a | **Original work** (`author: jeremyknows`). Upstream has `receiving-code-review` which is a different skill entirely. |
+| `intellectual-honesty` | 112 | n/a | **Original work**, CC-native (`~/.claude/skills/`). No upstream equivalent. |
 
 **Rationale:** obra/superpowers is a large multi-skill monorepo. We use 4-5 of its skills. Forking the full repo to stay in sync adds maintenance burden with no clear ROI. Our versions have intentional divergences (Watson-specific workflow additions, frontmatter, portability labels). Cherry-pick upstream changes manually if something valuable ships.
 
