@@ -88,7 +88,7 @@ Built on some good open-source work:
 - **[mattpocock/skills](https://github.com/mattpocock/skills)** — `grill-me` started here
 - **[obra/superpowers](https://github.com/obra/superpowers)** — `brainstorming`, `systematic-debugging`, `writing-plans`, `receiving-feedback` trace back to this
 - **[blader/humanizer](https://github.com/blader/humanizer)** — `humanizer` is maintained by @blader
-- **[karpathy/autoresearch](https://github.com/karpathy/autoresearch)** — `autoresearch` applies Karpathy's autonomous iteration approach
+- **[uditgoenka/autoresearch](https://github.com/uditgoenka/autoresearch)** — `autoresearch` is included **unchanged** from @uditgoenka's implementation of Karpathy's autonomous iteration approach. Synced directly from upstream.
 - **[anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official)** — `playground` came from Anthropic's official plugin collection
 
 Modified skills keep their original licenses. See individual skill directories for details.

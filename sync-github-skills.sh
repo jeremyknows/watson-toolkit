@@ -6,13 +6,20 @@ set -euo pipefail
 SKILLS="plugins/watson-toolkit/skills"
 
 sync_gh() {
-  local name="$1" repo="$2"
+  local name="$1" repo="$2" subpath="${3:-}"
   echo "Syncing $name from $repo..."
+  local tmp=$(mktemp -d)
+  git clone --depth 1 "$repo" "$tmp" 2>&1 | tail -1
   rm -rf "$SKILLS/$name"
-  git clone --depth 1 "$repo" "$SKILLS/$name" 2>&1 | tail -1
-  rm -rf "$SKILLS/$name/.git"
+  if [[ -n "$subpath" ]]; then
+    cp -r "$tmp/$subpath" "$SKILLS/$name"
+  else
+    mv "$tmp" "$SKILLS/$name"
+  fi
+  rm -rf "$tmp" "$SKILLS/$name/.git"
 }
 
+sync_gh "autoresearch"         "https://github.com/uditgoenka/autoresearch.git" ".claude/skills/autoresearch"
 sync_gh "complete-code-review" "https://github.com/jeremyknows/complete-code-review.git"
 sync_gh "decide"               "https://github.com/jeremyknows/decide.git"
 sync_gh "humanizer"            "https://github.com/blader/humanizer.git"
