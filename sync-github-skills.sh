@@ -15,6 +15,7 @@ sync_gh() {
 
 sync_gh "complete-code-review" "https://github.com/jeremyknows/complete-code-review.git"
 sync_gh "decide"               "https://github.com/jeremyknows/decide.git"
+sync_gh "humanizer"            "https://github.com/blader/humanizer.git"
 sync_gh "prism"                "https://github.com/jeremyknows/PRISM.git"
 sync_gh "publish-skills"       "https://github.com/jeremyknows/publish-skills.git"
 sync_gh "random-thought"       "https://github.com/jeremyknows/random-thought.git"
