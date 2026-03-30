@@ -1,5 +1,5 @@
 ---
-name: publish-plugin
+name: publish-cowork-plugin
 description: >
   Format, validate, and package a Cowork plugin for distribution. Use when the user asks to
   "publish a plugin", "package a plugin", "make a .plugin file", "fix my plugin structure",

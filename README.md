@@ -79,7 +79,7 @@ Build your own, audit what you have, publish when it's ready.
 |-------|--------------|
 | `skill-doctor` | Health audits with scoring (target: 11/14+), reference extraction for progressive disclosure, and vetting new skill installs before they pollute your context. |
 | `publish-skills` | Pre-publish checklist: frontmatter, directory structure, LICENSE, README, hardcoded reference scan. Catches the stuff that makes skills fail on install. |
-| `publish-plugin` | Validates, packages, and publishes Cowork/CC plugins. Structure validation through marketplace setup. |
+| `publish-cowork-plugin` | Validates, packages, and publishes Cowork/CC plugins. Structure validation through marketplace setup. |
 
 ## Acknowledgements
 

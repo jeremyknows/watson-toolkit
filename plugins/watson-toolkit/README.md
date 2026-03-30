@@ -61,7 +61,7 @@ Settings > Add marketplace > `https://github.com/jeremyknows/watson-toolkit`
 - **markdown-fetch** — Fetch web content as clean markdown (80% token reduction).
 - **skill-creator** — Create new skills, run evals, iterate, optimize.
 - **playground** — Interactive HTML playground builder.
-- **publish-plugin** — Format, validate, and package CoWork plugins for distribution.
+- **publish-cowork-plugin** — Format, validate, and package CoWork plugins for distribution.
 - **publish-skills** — Checklist for publishing Agent Skills spec-compliant skills to GitHub.
 
 ### Meta (2)
@@ -80,7 +80,7 @@ Settings > Add marketplace > `https://github.com/jeremyknows/watson-toolkit`
 
 | Source | Skills | License |
 |--------|--------|---------|
-| Original | autoresearch, brainstorming, deep-research, grill-me, intellectual-honesty, make-interfaces-feel-better, plan-review, playground, prd-to-issues, proposal-maker, publish-plugin, skill-doctor, systematic-debugging, ubiquitous-language, update-docs, write-a-prd, writing-plans, x-master | MIT |
+| Original | autoresearch, brainstorming, deep-research, grill-me, intellectual-honesty, make-interfaces-feel-better, plan-review, playground, prd-to-issues, proposal-maker, publish-cowork-plugin, skill-doctor, systematic-debugging, ubiquitous-language, update-docs, write-a-prd, writing-plans, x-master | MIT |
 | [Anthropic](https://github.com/anthropics/skills) | canvas-design, doc-coauthoring, frontend-design, skill-creator, web-artifacts-builder | Apache 2.0 |
 | [Anthropic](https://github.com/anthropics/skills) | pdf, docx, pptx, xlsx | Source-available |
 | [mvanhorn](https://github.com/mvanhorn/last30days-skill) | last30days | MIT |

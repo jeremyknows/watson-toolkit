@@ -9,7 +9,7 @@ Skills in watson-toolkit are pulled from three local sources. This doc explains 
 | `oc` | `~/.openclaw/skills/` | Most skills — OpenClaw is primary |
 | `ow` | `~/.openclaw/agents/main/workspace/skills/` | Agent workspace skills (e.g. random-thought) |
 | `cc` | `~/.claude/skills/` | CC-native skills (autoresearch, doc-coauthoring, plan-review) |
-| `tk` | Toolkit repo only | Skills with no local source (publish-plugin) — never synced |
+| `tk` | Toolkit repo only | Skills with no local source (publish-cowork-plugin) — never synced |
 
 The manifest lives inside `sync-watson-toolkit.sh`. Each entry is `toolkit-name:prefix:source-name`.
 
