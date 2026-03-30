@@ -159,11 +159,11 @@ A question about a UI topic is not automatically visual. "What does personality 
 
 ## Dependencies
 
-- `sessions_spawn` — spec-document-reviewer dispatch (isolated session)
+- `sessions_spawn` — spec-document-reviewer dispatch (isolated session) *(OpenClaw/Claude Code only — skip on runtimes without subagent support)*
 - `writing-plans` skill — mandatory next step after spec approval
 - `git` — spec must be committed before review loop runs
 - `canvas` tool — optional, for visual companion browser integration
-- `sub-agent-complete.sh` — emit completion event on spec approval
+- `sub-agent-complete.sh` — emit completion event on spec approval *(OpenClaw-specific, optional)*
 
 ---
 
