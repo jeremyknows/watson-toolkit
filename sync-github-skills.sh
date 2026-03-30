@@ -10,10 +10,16 @@ sync_gh() {
   echo "Syncing $name from $repo..."
   local tmp=$(mktemp -d)
   git clone --depth 1 "$repo" "$tmp" 2>&1 | tail -1
-  rm -rf "$SKILLS/$name"
   if [[ -n "$subpath" ]]; then
+    if [[ ! -d "$tmp/$subpath" ]]; then
+      echo "ERROR: subpath '$subpath' not found in $repo — aborting $name sync (keeping existing copy)"
+      rm -rf "$tmp"
+      return 1
+    fi
+    rm -rf "$SKILLS/$name"
     cp -r "$tmp/$subpath" "$SKILLS/$name"
   else
+    rm -rf "$SKILLS/$name"
     mv "$tmp" "$SKILLS/$name"
   fi
   rm -rf "$tmp" "$SKILLS/$name/.git"
