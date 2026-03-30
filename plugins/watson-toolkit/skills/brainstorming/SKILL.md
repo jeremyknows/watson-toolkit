@@ -159,12 +159,11 @@ A question about a UI topic is not automatically visual. "What does personality 
 
 ## Dependencies
 
-| Dependency | Purpose | Runtime |
-|------------|---------|---------|
-| Sub-agent capability | Spec-document-reviewer dispatch (optional) | Agent tool (Cowork/CC), sessions_spawn (OpenClaw) |
-| `writing-plans` skill | Mandatory next step after spec approval | All |
-| `git` | Spec must be committed before review loop runs | All |
-| `canvas` tool | Optional, for visual companion browser integration | All |
+- `sessions_spawn` — spec-document-reviewer dispatch (isolated session)
+- `writing-plans` skill — mandatory next step after spec approval
+- `git` — spec must be committed before review loop runs
+- `canvas` tool — optional, for visual companion browser integration
+- `sub-agent-complete.sh` — emit completion event on spec approval
 
 ---
 

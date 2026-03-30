@@ -1,6 +1,6 @@
 # Watson Toolkit
 
-19 skills for rigorous thinking, honest feedback, research, code review, and creative work.
+20 skills for rigorous thinking, honest feedback, research, code review, and creative work.
 
 Works in **Claude Code** and **Cowork**.
 
@@ -22,27 +22,45 @@ npx watson-toolkit
 
 ## Skills
 
+**Thinking & decisions**
 | Skill | What it does |
 |-------|-------------|
-| `autoresearch` | Autonomous goal-directed iteration — loops, modifies, verifies, repeats |
 | `brainstorming` | Structured ideation with real divergence |
-| `complete-code-review` | Multi-perspective parallel code review |
-| `decide` | Surface the single highest-priority decision in your queue |
-| `doc-coauthoring` | Collaborative document writing with structured feedback loops |
 | `grill-me` | Stress-test your thinking — asks the questions you're avoiding |
-| `humanizer` | Remove AI writing patterns from text |
 | `intellectual-honesty` | Force genuine epistemic rigor — no hedging, no false confidence |
+| `decide` | Surface the single highest-priority decision in your queue |
 | `plan-review` | Review a plan for gaps, assumptions, and failure modes |
-| `playground` | Build interactive HTML explorers for any concept |
-| `prism` | Multi-reviewer skill auditing and improvement system |
-| `publish-plugin` | Checklist for publishing a Cowork/CC plugin to GitHub |
-| `publish-skills` | Checklist for publishing an Agent Skill to GitHub |
-| `random-thought` | Workspace reflection — surface a random insight from your own docs |
-| `receiving-feedback` | Structure how you take in and act on feedback |
-| `skill-doctor` | Diagnose, audit, and improve existing skills |
-| `systematic-debugging` | Methodical debugging loop for hard problems |
 | `writing-plans` | Write plans that actually get executed |
+
+**Building & code**
+| Skill | What it does |
+|-------|-------------|
+| `complete-code-review` | Multi-perspective parallel code review |
+| `systematic-debugging` | Methodical debugging loop for hard problems |
+| `autoresearch` | Autonomous goal-directed iteration — loops, modifies, verifies, repeats |
+| `sprint-cowork` | Walk-away autonomous sprints — start it, leave, come back to results |
+
+**Writing & communication**
+| Skill | What it does |
+|-------|-------------|
+| `doc-coauthoring` | Collaborative document writing with structured feedback loops |
+| `humanizer` | Remove AI writing patterns from text |
+| `receiving-feedback` | Structure how you take in and act on feedback |
+
+**Creative & exploration**
+| Skill | What it does |
+|-------|-------------|
+| `playground` | Build interactive HTML explorers for any concept |
+| `random-thought` | Workspace reflection — surface a random insight from your own docs |
 | `x-fetch` | Fetch tweet/thread/article content from X URLs via fxtwitter |
+
+**Skill & plugin tooling**
+| Skill | What it does |
+|-------|-------------|
+| `skill-doctor` | Diagnose, audit, and improve existing skills |
+| `prism` | Multi-reviewer skill auditing and improvement system |
+| `publish-skills` | Checklist for publishing an Agent Skill to GitHub |
+| `publish-plugin` | Checklist for publishing a Cowork/CC plugin to GitHub |
 
 ## Acknowledgements
 

@@ -1,0 +1,7 @@
+.DS_Store
+sprint-test-audit/
+sprint-test/
+sprint-discovery-test/
+node_modules/
+__pycache__/
+*.pyc
