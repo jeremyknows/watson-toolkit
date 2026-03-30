@@ -63,6 +63,30 @@ Or in one shot (commits automatically):
 
 ---
 
+## Third-Party Skill Policies
+
+### autoresearch — upstream-managed (uditgoenka/autoresearch)
+Synced directly from upstream with **zero modifications**. Run `./sync-github-skills.sh` to update.
+The skill lives at `.claude/skills/autoresearch/` in the upstream repo — subpath is handled by the sync script.
+If the sync script errors with "subpath not found", the upstream repo reorganized — do not auto-delete the local copy, investigate first.
+
+### obra/superpowers skills — permanent fork (no upstream sync)
+**Decision (2026-03-30):** The following skills originated from [obra/superpowers](https://github.com/obra/superpowers) but are now treated as permanent forks. No upstream sync will be performed.
+
+| Skill | Our lines | Upstream lines | What we changed |
+|-------|-----------|----------------|-----------------|
+| `brainstorming` | 197 | 164 | +33 — added frontmatter (taxonomy, health_score), HARD-GATE block, OC-specific deps section |
+| `systematic-debugging` | 197 | 296 | -99 — we have an older snapshot; upstream grew significantly after our clone |
+| `writing-plans` | 214 | 152 | +62 — added content specific to our workflow |
+| `receiving-feedback` | 285 | n/a | Not in upstream (upstream has `receiving-code-review`, different skill) |
+| `intellectual-honesty` | 112 | n/a | Not in upstream at all — original work, inspired by superpowers style |
+
+**Rationale:** obra/superpowers is a large multi-skill monorepo. We use 4-5 of its skills. Forking the full repo to stay in sync adds maintenance burden with no clear ROI. Our versions have intentional divergences (Watson-specific workflow additions, frontmatter, portability labels). Cherry-pick upstream changes manually if something valuable ships.
+
+**`systematic-debugging` note:** Upstream is 99 lines longer than ours — worth a manual review to see what was added. Deferred, not forgotten.
+
+---
+
 ## Compatibility Rule
 
 Skills go in the toolkit only if they work without OpenClaw-specific tools (`cron`, `message`, `nodes`, `sessions_spawn`). OpenClaw-specific docs belong in `references/openclaw.md` inside the skill — not in the core `SKILL.md`.
