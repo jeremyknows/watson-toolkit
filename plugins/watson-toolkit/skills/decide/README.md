@@ -19,7 +19,7 @@ node scripts/decide-handler.js invoke
 
 ## Config
 
-By default uses `~/.decide/` for data. Set `DECIDE_WORKSPACE` to point at a custom directory, or `TASK_MANAGER_URL` to enable task status updates on Yes/Dismiss.
+By default uses `$OPENCLAW_WORKSPACE_DIR` (set by OpenClaw runtime) or `~/.decide/` for data.
 
 To use custom data sources, create `~/.decide/config.json`:
 

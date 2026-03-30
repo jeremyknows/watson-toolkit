@@ -26,21 +26,21 @@ const CONFIG_PATH = process.env.DECIDE_CONFIG ||
 
 // WORKSPACE resolution order:
 //   1. DECIDE_WORKSPACE env var (explicit override — portable, any agent)
-//   2. ~/.decide/ folder (user-level decide data dir — the portable default)
-//   3. OPENCLAW_WORKSPACE_DIR env var (set by OpenClaw runtime for the active agent)
+//   2. OPENCLAW_WORKSPACE_DIR env var (set by OpenClaw runtime for the active agent)
+//   3. ~/.decide/ folder (user-level decide data dir — the portable default)
+//   4. ~/.openclaw/agents/main/workspace (OpenClaw agent fallback)
 const WORKSPACE = process.env.DECIDE_WORKSPACE ||
-  (fs.existsSync(path.join(os.homedir(), '.decide')) ? path.join(os.homedir(), '.decide') : null) ||
   process.env.OPENCLAW_WORKSPACE_DIR ||
-  path.join(os.homedir(), '.decide'); // fallback: create ~/.decide/ on first use
+  path.join(os.homedir(), '.decide') ||
+  path.join(os.homedir(), '.openclaw', 'agents', 'main', 'workspace');
 
 // ─── Safe path roots (jsonfile sources must live inside one of these) ────────
 
 const SAFE_PATH_ROOTS = [
+  path.join(os.homedir(), '.openclaw'),
   path.join(os.homedir(), '.decide'),
   // Also allow DECIDE_WORKSPACE if set (supports custom install locations)
   ...(process.env.DECIDE_WORKSPACE ? [process.env.DECIDE_WORKSPACE] : []),
-  // OpenClaw runtime paths (last — not required, just supported)
-  path.join(os.homedir(), '.openclaw'),
 ];
 
 // ─── Watson defaults (used when no config file present) ──────────────────────

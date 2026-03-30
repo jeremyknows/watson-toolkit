@@ -7,7 +7,7 @@
  *
  * Sources:
  *   jsonfile — reads a JSON file with carry-forwards or threads schema
- *   http     — fetches from an HTTP endpoint (task manager, custom API, etc.)
+ *   http     — fetches from an HTTP endpoint (WatsonFlow, etc.)
  *
  * Degrades gracefully when graceful:true sources are unreachable.
  * Throws when graceful:false sources fail (mandatory sources).
@@ -80,7 +80,7 @@ function normalizeThread(t, sourceName) {
     priority: 'P1',
     age_days: age,
     title: t.name || t.description || `Thread ${t.id}`,
-    context: t.description || `Thread blocked on a pending decision. Project: ${t.project || 'unknown'}.`,
+    context: t.description || `Discord thread blocked on owner's decision. Project: ${t.project || 'unknown'}.`,
     thread_id: t.id,
     source_ref: t.id,
     snoozed_until: null,
