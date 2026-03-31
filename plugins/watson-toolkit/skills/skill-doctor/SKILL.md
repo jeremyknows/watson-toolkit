@@ -1,6 +1,7 @@
 ---
 name: skill-doctor
-description: Diagnose, audit, and improve existing AgentSkills. Use when: (1) running a health audit on a skill, (2) improving a skill that scores below 11/14, (3) running PRISM review on a skill, (4) extracting references/ for progressive disclosure, (5) autoresearch loop on a skill's outputs, (6) vetting a new skill before installation (Phase 0). Triggers on: "audit this skill", "improve this skill", "run PRISM on", "health check this skill", "run autoresearch on", "skill-doctor", "install this skill", "is this skill safe". NOT for: creating a skill from scratch (use skill-creator), publishing a skill to GitHub (use publish-skills), or reviewing code in a software project (use complete-code-review).
+description: >-
+  Diagnose, audit, and improve existing AgentSkills. Use when running a health audit on a skill, improving a skill that scores below 11/14, running PRISM review on a skill, extracting references/ for progressive disclosure, autoresearch loop on a skill's outputs, or vetting a new skill before installation (Phase 0). Triggers on "audit this skill", "improve this skill", "run PRISM on", "health check this skill", "run autoresearch on", "skill-doctor", "install this skill", "is this skill safe". NOT for creating a skill from scratch (use skill-creator), publishing a skill to GitHub (use publish-skills), or reviewing code in a software project (use complete-code-review).
 version: 1.8.0
 license: MIT
 taxonomy_category: Code Quality & Review

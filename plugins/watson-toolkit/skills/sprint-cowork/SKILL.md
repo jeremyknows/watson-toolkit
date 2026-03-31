@@ -27,7 +27,37 @@ Autonomous, goal-driven work sessions. You define what needs to get done. Sprint
 
 > **Before writing goals:** Sprint quality is determined almost entirely by how goals are written. Thematic goals ("analyze the codebase") produce dramatically worse output than specific goals ("find all functions with >50 lines, extract to modules, write tests for each"). Write goals as graded tests with acceptance criteria.
 
+## Phase 0: Clarity Gate (Mandatory)
+
+**Always run before Phase 1.** No sprint starts without passing this gate.
+
+Watson's job at this stage is to reach ≥95% confidence about what's actually wanted — not what was said. Use the `grill-me` skill protocol: ask one question at a time, walk down each branch of the decision tree, provide a recommended answer with each question.
+
+**Gate triggers automatically when:** user says "sprint on X", "start a sprint", "work on this", or any trigger phrase from the skill description.
+
+**Gate passes when Watson can state:**
+1. The sprint goal in one concrete sentence (no hedging words: "maybe", "sort of", "roughly")
+2. Each goal's acceptance criteria as a machine-checkable command
+3. What success looks like vs. what failure looks like
+
+**Gate output:** A `sprint-brief.md` in the working directory with:
+- Confirmed goal (one sentence)
+- Confirmed acceptance criteria per goal
+- Explicit "out of scope" list (anything mentioned but excluded)
+- Watson's confidence level (target: ≥95%)
+
+**Skip option:** If the user provides a tight spec or explicitly says "skip grill-me" or uses `--skip-clarify`, Phase 0 is bypassed. Watson writes a note to `sprint-progress.md`:
+```
+⚠️ Clarity Gate skipped — proceeding on stated goals without clarification. Risk: goal drift.
+```
+
+**After gate passes:** Proceed to Phase 1 (Setup). The `sprint-brief.md` becomes the spec path in the sprint-state.json header.
+
+---
+
 ## Quick Start (Standard Sprint)
+
+**Phase 0 must run first.** See above. After the Clarity Gate passes and `sprint-brief.md` exists:
 
 For the common case — 2-4 atomic goals, medium autonomy, ~2 hours — follow these 4 steps:
 

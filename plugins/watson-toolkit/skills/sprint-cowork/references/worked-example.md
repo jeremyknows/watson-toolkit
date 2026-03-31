@@ -10,7 +10,7 @@ This sprint audited ~60 skill directories — inventory, metadata extraction, an
     {
       "id": "g1",
       "description": "Scan every directory in the workspace. For each, check if a SKILL.md file exists. Write skills-inventory.md listing every directory, whether it has a SKILL.md (yes/no), and the file size of SKILL.md if present.",
-      "context": "Workspace is the parent of the sprint directory. It contains ~80 directories, most of which are skills. Some are standalone .md files (not directories). Only audit directories. Use ls and test -f commands to check. Output should be a markdown table.",
+      "context": "Workspace is the parent of the sprint directory. It contains ~60 directories, most of which are skills. Some are standalone .md files (not directories). Only audit directories. Use ls and test -f commands to check. Output should be a markdown table.",
       "depends_on": [],
       "status": "pending",
       "acceptance": "skills-inventory.md exists in the sprint directory with a markdown table containing at least 50 rows and columns: Directory, Has SKILL.md, File Size.",
@@ -33,7 +33,7 @@ This sprint audited ~60 skill directories — inventory, metadata extraction, an
       "context": "The categorization targets are listed in a reference file in the workspace root. Read it to get the skill list. For platform-specific detection, grep SKILL.md for platform-specific APIs or dependencies. Shipped skills are: docx, pptx, pdf, xlsx, skill-creator. 'scratch' = directories without SKILL.md or with names suggesting test/temp (sprint-test, build-feature.bak, etc).",
       "depends_on": ["g1", "g2"],
       "status": "pending",
-      "acceptance": "sprint-audit-report.md exists with a categorized table and a summary section showing count per category. All ~80 directories are accounted for.",
+      "acceptance": "sprint-audit-report.md exists with a categorized table and a summary section showing count per category. All ~60 directories are accounted for.",
       "artifacts": [],
       "progress_notes": ""
     }
