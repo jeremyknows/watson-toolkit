@@ -1,7 +1,7 @@
 {
   "name": "watson-toolkit",
-  "version": "1.5.0",
-  "description": "19 skills for rigorous thinking, honest feedback, research, and creative work. Install into Claude Code with one command.",
+  "version": "2.0.0",
+  "description": "24 skills for rigorous thinking, honest feedback, research, code review, and creative work. Works in Claude Code, Cowork, and any Agent Skills-compatible harness.",
   "bin": {
     "watson-toolkit": "bin/install.js"
   },

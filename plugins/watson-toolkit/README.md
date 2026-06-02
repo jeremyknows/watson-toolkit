@@ -1,94 +1,16 @@
-# Watson Toolkit
+# Watson Toolkit (plugin)
 
-A Claude plugin bundling 35 production-tested skills for research, writing, development, planning, design, review, and document creation.
+24 skills for rigorous thinking, honest feedback, research, code review, and creative work.
 
-Built by a non-technical founder who runs AI agent infrastructure daily. Every skill here solves a real workflow problem.
+This is the plugin directory that Claude Code and Cowork load. The full skill list, provenance/attribution table, install instructions, and changelog live in the **[repository README](../../README.md)** — one source of truth, not two.
 
-## Installation
+## Quick install
 
-### CoWork (Desktop)
-Settings > Add marketplace > `https://github.com/jeremyknows/watson-toolkit`
+**Cowork:** Settings > Add marketplace > `https://github.com/jeremyknows/watson-toolkit`
 
-### Claude Code (CLI)
-```bash
+**Claude Code:**
+
+```
 /plugin marketplace add jeremyknows/watson-toolkit
 /plugin install watson-toolkit@watson-toolkit
 ```
-
-## Skills
-
-### Workflow & Planning (8)
-- **autoresearch** — Autonomous goal-directed iteration. Modify, verify, keep/discard, repeat.
-- **brainstorming** — Pre-implementation design exploration.
-- **grill-me** — Stress-test plans and designs through relentless interviewing.
-- **intellectual-honesty** — Honest assessment over comfortable agreement.
-- **plan-review** — Two-phase review: product thinking then engineering stress-test.
-- **prd-to-issues** — Break a PRD into GitHub issues using vertical slices.
-- **write-a-prd** — Create a PRD through user interview and codebase exploration.
-- **writing-plans** — Multi-step task planning before touching code.
-
-### Research (3)
-- **deep-research** — 7-stage structured research protocol.
-- **last30days** — Research any topic across Reddit, X, YouTube, TikTok, Instagram, HN, Polymarket, and web.
-- **x-master** — Master routing for all X/Twitter operations with 2026 algorithm intelligence.
-
-### Writing & Content (3)
-- **humanizer** — Remove 25+ signs of AI-generated writing.
-- **jackbutcher-voice** — Style guide based on Jack Butcher's writing mechanics.
-- **ubiquitous-language** — Extract a DDD-style glossary from conversations.
-
-### Dev & Design (9)
-- **canvas-design** — Create visual art as .png and .pdf.
-- **frontend-design** — Production-grade, distinctive frontend interfaces.
-- **improve-codebase-architecture** — Find opportunities for architectural improvement.
-- **make-interfaces-feel-better** — Polish UI interactions and micro-animations.
-- **systematic-debugging** — Structured bug diagnosis before proposing fixes.
-- **update-docs** — Autonomous codebase documentation generator.
-- **web-artifacts-builder** — Multi-component artifacts using React, Tailwind, shadcn/ui.
-- **receiving-feedback** — Process code review feedback with technical rigor.
-- **proposal-maker** — Generate structured proposals from requirements.
-
-### Documents (4)
-- **pdf** — Read, extract, merge, split, rotate, watermark, OCR, create PDFs.
-- **docx** — Create, read, edit Word documents.
-- **pptx** — Create and edit PowerPoint decks.
-- **xlsx** — Create and edit Excel files.
-
-### Review (1)
-- **prism** — Parallel review by 5+ independent specialist models.
-
-### Utility (5)
-- **markdown-fetch** — Fetch web content as clean markdown (80% token reduction).
-- **skill-creator** — Create new skills, run evals, iterate, optimize.
-- **playground** — Interactive HTML playground builder.
-- **publish-cowork-plugin** — Format, validate, and package CoWork plugins for distribution.
-- **publish-skills** — Checklist for publishing Agent Skills spec-compliant skills to GitHub.
-
-### Meta (2)
-- **doc-coauthoring** — Three-stage doc writing: context gathering, refinement, reader testing.
-- **skill-doctor** — Diagnose, audit, and improve existing AgentSkills.
-
-## Updating
-
-1. Edit the relevant `SKILL.md` in `skills/<skill-name>/`
-2. **Bump the version** in `.claude-plugin/plugin.json`
-3. Commit and push
-
-> **Always bump the version in plugin.json on every change. CoWork caches by version number.**
-
-## Attribution
-
-| Source | Skills | License |
-|--------|--------|---------|
-| Original | autoresearch, brainstorming, deep-research, grill-me, intellectual-honesty, make-interfaces-feel-better, plan-review, playground, prd-to-issues, proposal-maker, publish-cowork-plugin, skill-doctor, systematic-debugging, ubiquitous-language, update-docs, write-a-prd, writing-plans, x-master | MIT |
-| [Anthropic](https://github.com/anthropics/skills) | canvas-design, doc-coauthoring, frontend-design, skill-creator, web-artifacts-builder | Apache 2.0 |
-| [Anthropic](https://github.com/anthropics/skills) | pdf, docx, pptx, xlsx | Source-available |
-| [mvanhorn](https://github.com/mvanhorn/last30days-skill) | last30days | MIT |
-| [Visualize Value](https://github.com/visualizevalue/jackbutcher.md) | jackbutcher-voice (voice data) | See source |
-| [Siqi Chen](https://github.com/blader/humanizer) | humanizer | MIT |
-| [obra/superpowers](https://github.com/obra/superpowers) | receiving-feedback | Adapted, MIT |
-| [jeremyknows](https://github.com/jeremyknows/publish-skills) | publish-skills | MIT |
-
-## License
-
-MIT. Bundled third-party skills retain their original licenses. See [LICENSE](../../LICENSE).

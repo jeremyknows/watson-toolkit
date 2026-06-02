@@ -1,5 +1,6 @@
 ---
 name: systematic-debugging
+runtime: claude-code
 description: |
   Use when encountering any bug, test failure, or unexpected behavior — before proposing fixes.
   Trigger conditions: test failure, production bug, unexpected behavior, performance regression,

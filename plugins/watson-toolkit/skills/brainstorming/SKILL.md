@@ -1,5 +1,6 @@
 ---
 name: brainstorming
+runtime: claude-code
 version: 2.0.0
 description: >
   Use before any creative work — creating features, building components, adding
@@ -117,6 +118,10 @@ Wait for user approval. If changes requested, make them and re-run the spec revi
 
 ---
 
+## Visual / media artifact direction
+
+When the creative work is a demo video, product teaser, app trailer, pitch artifact, or visual proof-of-concept, clarify the intended artifact class before producing another cut. A QA-proof reel is different from a founder walkthrough, product teaser, launch trailer, or hybrid. Do not treat “proves the screens exist” as “vibe is done.” For taste-facing cuts, remove QA overlays/annotation boxes, avoid equal-duration slideshow pacing, use the project brand system as the edit language, and spot-check frames for clipped type or internal-tool residue before calling the artifact done. See `references/demo-video-vibe-direction.md` for the reusable pattern and the LOCALS session example.
+
 ## Visual Companion
 
 A browser-based companion for showing mockups, diagrams, and visual options. Available as a tool — not a mode.
@@ -152,7 +157,7 @@ A question about a UI topic is not automatically visual. "What does personality 
 3. **Spec review loop can deadlock.** If the reviewer flags the same issue 3+ times, the spec has a structural problem — surface to human instead of looping indefinitely. Hard cap: 3 iterations.
 4. **"Too large to spec" decomposition is often skipped.** When scope is ambiguous, there's pressure to just start clarifying. But if the project has independent subsystems, starting with the wrong one wastes the whole session. Decompose first.
 5. **Visual companion is opt-in AND per-question.** Offering it once and then using it for every question defeats the purpose. Each visual question is a judgment call.
-6. **Save path is Watson-specific.** Upstream obra uses `docs/superpowers/specs/`. Watson convention is `plans/specs/`. Never use the upstream path.
+6. **Save path is fleet-specific.** Upstream obra uses `docs/superpowers/specs/`. local convention is `plans/specs/`. Never use the upstream path.
 7. **Terminal state is writing-plans, nothing else.** It's tempting to invoke `build-feature` or `executing-plans` directly. Don't. Always route through `writing-plans` so there's a formal plan artifact.
 
 ---
@@ -194,4 +199,4 @@ Run after each completed spec:
 
 | Date | Version | Change | Score |
 |------|---------|--------|-------|
-| 2026-03-19 | 2.0.0 | Full rewrite from upstream obra — HARD-GATE, spec review loop, user review gate, visual companion, checklist, Gotchas/Deps/Autoresearch, Watson save path, NOT FOR list | 11/14 |
+| 2026-03-19 | 2.0.0 | Full rewrite from upstream obra — HARD-GATE, spec review loop, user review gate, visual companion, checklist, Gotchas/Deps/Autoresearch, local save path, NOT FOR list | 11/14 |

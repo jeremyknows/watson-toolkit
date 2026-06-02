@@ -1,5 +1,6 @@
 ---
 name: sprint-cowork
+runtime: claude-code
 description: >
   Run autonomous work sprints with periodic check-ins and goal tracking.
   Use this skill whenever the user wants autonomous, background, or scheduled work — even if they
@@ -15,7 +16,7 @@ description: >
   NOT for: work requiring frequent human decisions, single quick tasks that fit in one session,
   or externally-facing actions (deployments, emails, posts).
 license: MIT
-compatibility: "Cowork (scheduled tasks + Agent tool), Claude Code (while-loop)"
+compatibility: "Cowork (scheduled tasks + Agent tool), Claude Code (while-loop); Hermes requires adaptation: use cronjob + delegate_task, not create_scheduled_task/Agent"
 metadata:
   author: jeremyknows
   version: "1.0.0"
@@ -31,11 +32,11 @@ Autonomous, goal-driven work sessions. You define what needs to get done. Sprint
 
 **Always run before Phase 1.** No sprint starts without passing this gate.
 
-Watson's job at this stage is to reach ≥95% confidence about what's actually wanted — not what was said. Use the `grill-me` skill protocol: ask one question at a time, walk down each branch of the decision tree, provide a recommended answer with each question.
+The director's job at this stage is to reach ≥95% confidence about what's actually wanted — not what was said. Use the `grill-me` skill protocol: ask one question at a time, walk down each branch of the decision tree, provide a recommended answer with each question.
 
 **Gate triggers automatically when:** user says "sprint on X", "start a sprint", "work on this", or any trigger phrase from the skill description.
 
-**Gate passes when Watson can state:**
+**Gate passes when the director can state:**
 1. The sprint goal in one concrete sentence (no hedging words: "maybe", "sort of", "roughly")
 2. Each goal's acceptance criteria as a machine-checkable command
 3. What success looks like vs. what failure looks like
@@ -44,9 +45,9 @@ Watson's job at this stage is to reach ≥95% confidence about what's actually w
 - Confirmed goal (one sentence)
 - Confirmed acceptance criteria per goal
 - Explicit "out of scope" list (anything mentioned but excluded)
-- Watson's confidence level (target: ≥95%)
+- the director's confidence level (target: ≥95%)
 
-**Skip option:** If the user provides a tight spec or explicitly says "skip grill-me" or uses `--skip-clarify`, Phase 0 is bypassed. Watson writes a note to `sprint-progress.md`:
+**Skip option:** If the user provides a tight spec or explicitly says "skip grill-me" or uses `--skip-clarify`, Phase 0 is bypassed. the director writes a note to `sprint-progress.md`:
 ```
 ⚠️ Clarity Gate skipped — proceeding on stated goals without clarification. Risk: goal drift.
 ```

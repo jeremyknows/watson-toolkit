@@ -1,5 +1,6 @@
 ---
 name: intellectual-honesty
+runtime: claude-code
 description: >
   Activate when doing reviews, audits, decision support, or any work where the user
   needs honest assessment over comfortable agreement. Use when asked to evaluate,
