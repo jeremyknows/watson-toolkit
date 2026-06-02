@@ -1,6 +1,6 @@
 # Watson Toolkit
 
-23 skills that fix the ways Claude actually breaks: agreeing with everything, skipping the thinking, guessing at fixes instead of finding root causes, writing like a robot, declaring victory without proof, and not being able to work while you're away.
+24 skills that fix the ways Claude actually breaks: agreeing with everything, skipping the thinking, guessing at fixes instead of finding root causes, writing like a robot, declaring victory without proof, and not being able to work while you're away.
 
 Skills follow the open [Agent Skills](https://github.com/agentskills/agentskills) format, so they work in **Claude Code**, **Cowork**, **Codex**, and any harness that reads `SKILL.md` directories.
 
@@ -36,7 +36,6 @@ Claude's default is to start writing code the second you describe a problem. The
 | `grill-with-docs` | Same relentless interview, but grounded in your project docs — it reads them first, then grills you on the gaps between what's written and what you're asking for. |
 | `plan-review` | Two phases: first, is this the right thing to build? Then, is this the right way to build it? Catches bad plans before they turn into bad code. |
 | `writing-plans` | Turns specs into step-by-step implementation plans that coordinate across files. The thing that goes between deciding what to build and building it. |
-| `decide` | Pulls the single highest-priority decision out of your queue. Blocked threads, carry-forwards, open tasks. One thing at a time. |
 
 ### Push back
 
@@ -49,6 +48,7 @@ Claude agrees with you too much. These skills add real resistance.
 | `complete-code-review` | Spawns 5 parallel reviewers with confidence scoring. The disagreements between reviewers are where the real design decisions live. |
 | `prism` | Parallel adversarial review by independent specialists. Disagreements are more valuable than consensus. |
 | `boil-the-ocean` | The under-build counter. Catches "MVP shipped" rationalizations at the moment they happen — TODO comments, workarounds instead of fixes, missing tests — and asks whether the missing piece is bounded (finish it now) or unbounded (flag it and stop). |
+| `verification-before-completion` | No "done" without evidence. Requires running the verification command and reading its output before any success claim. The gate between "should work" and "works." |
 
 ### Build and debug
 
@@ -57,6 +57,7 @@ Claude agrees with you too much. These skills add real resistance.
 | `systematic-debugging` | Four phases: observe, hypothesize, test, fix. You have to finish observing before you can propose a fix. Stops the spiral of random patches. |
 | `autoresearch` | Autonomous iteration. Sets a goal, loops (modify, verify, keep or discard, repeat), runs bounded iterations until the metric converges. |
 | `sprint-cowork` | Walk-away work. Set goals with acceptance criteria, start a sprint, leave for hours. A director fires every 25 minutes, dispatches workers, tracks progress, handles stalls, writes a report when it's done. You can also give it a vague topic like "improve security" and it'll scope the work itself in the first cycle, then execute. |
+| `baton` | Session continuity. When work will continue in a future session, write a "baton" — a cold-start-ready continuation prompt with state inventory, self-audit, and a dry-run as a cold reader. The next session picks up without re-discovery. |
 
 ### Write like a human
 
@@ -93,7 +94,6 @@ This toolkit bundles original work alongside excellent open-source skills from o
 | Skill | Origin | Upstream |
 |-------|--------|----------|
 | `prism` | **Original** | [jeremyknows/PRISM](https://github.com/jeremyknows/PRISM) |
-| `decide` | **Original** | [jeremyknows/decide](https://github.com/jeremyknows/decide) |
 | `complete-code-review` | **Original** | [jeremyknows/complete-code-review](https://github.com/jeremyknows/complete-code-review) |
 | `skill-doctor` | **Original** | [jeremyknows/skill-doctor](https://github.com/jeremyknows/skill-doctor) |
 | `publish-skills` | **Original** | [jeremyknows/publish-skills](https://github.com/jeremyknows/publish-skills) |
@@ -105,12 +105,14 @@ This toolkit bundles original work alongside excellent open-source skills from o
 | `sprint-cowork` | **Original** | this repo |
 | `publish-cowork-plugin` | **Original** | this repo |
 | `boil-the-ocean` | **Original** | this repo |
+| `baton` | **Original** (portable edition) | this repo |
 | `playground` | **Original**, derived from Anthropic's official plugin collection | [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) |
 | `brainstorming` | **Fork** of obra/superpowers (substantially modified) | [obra/superpowers](https://github.com/obra/superpowers) |
 | `systematic-debugging` | **Fork** of obra/superpowers (substantially modified) | [obra/superpowers](https://github.com/obra/superpowers) |
 | `writing-plans` | **Fork** of obra/superpowers (substantially modified) | [obra/superpowers](https://github.com/obra/superpowers) |
 | `grill-me` | **Third-party**, unmodified | [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock |
 | `grill-with-docs` | **Third-party**, unmodified | [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock |
+| `verification-before-completion` | **Third-party**, unmodified | [obra/superpowers](https://github.com/obra/superpowers) by Jesse Vincent |
 | `humanizer` | **Third-party**, unmodified | [blader/humanizer](https://github.com/blader/humanizer) by @blader |
 | `autoresearch` | **Third-party**, unmodified | [uditgoenka/autoresearch](https://github.com/uditgoenka/autoresearch) by @uditgoenka |
 | `last30days` | **Third-party**, unmodified | [mvanhorn/last30days-skill](https://github.com/mvanhorn/last30days-skill) by @mvanhorn |
@@ -131,7 +133,9 @@ MIT. See [LICENSE](LICENSE). Bundled third-party skills retain their original li
 ### 2.0.0 — 2026-06-02
 
 - **Every skill refreshed** to its current canonical version (the toolkit had been frozen since April; `prism` alone gained simplicity-pass mode, wiki mode, and custom review panels since then)
-- **New skills:** `grill-with-docs`, `boil-the-ocean`, `last30days`
+- **New skills:** `grill-with-docs`, `boil-the-ocean`, `last30days`, `baton` (portable edition), `verification-before-completion` (obra's upstream)
+- **Removed:** `decide` — its default data sources assume private infrastructure; it returns to the toolkit after a standalone refactor
+- **`prism` sanitized** — legacy workspace paths and internal role names in the published skill replaced with generic equivalents
 - **New provenance table** — original vs. third-party, with upstream links and attribution
 - **New publish pipeline** — replaces the old bidirectional sync scripts with a one-way generated-mirror model (fleet canonical → sanitize → review → publish)
 - **Harness-agnostic framing** — Agent Skills format; CC, Cowork, Codex, npm install paths
