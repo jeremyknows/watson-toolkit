@@ -1,6 +1,6 @@
 # Watson Toolkit
 
-24 skills that fix the ways Claude actually breaks: agreeing with everything, skipping the thinking, guessing at fixes instead of finding root causes, writing like a robot, declaring victory without proof, and not being able to work while you're away.
+24 skills that fix the ways agents break: agreeing with everything, skipping the thinking, guessing at fixes instead of finding root causes, writing like a robot, declaring victory without proof, and not being able to work while you're away.
 
 Skills follow the open [Agent Skills](https://github.com/agentskills/agentskills) format, so they work in **Claude Code**, **Cowork**, **Codex**, and any harness that reads `SKILL.md` directories.
 
