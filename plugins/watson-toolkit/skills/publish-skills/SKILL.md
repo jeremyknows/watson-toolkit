@@ -1,5 +1,6 @@
 ---
 name: publish-skills
+runtime: claude-code
 description: |
   Checklist for publishing an Agent Skills spec-compliant skill to GitHub.
   Use when: (1) preparing a skill for open source release, (2) reviewing a
@@ -123,6 +124,68 @@ Run through these checks before the first commit:
 | Committer identity shows machine user, not author | `git log --format="%an <%ae>"` |
 | SKILL.md `name` doesn't match directory name | Compare frontmatter to `basename $(pwd)` |
 | Description exceeds 1024 chars | `grep -A20 'description' SKILL.md \| wc -c` |
+| Fleet-internal personas / paths leak into "public" SKILL.md | **Run the publish-time sanitizer pipeline (Section 9)** |
+
+### 9. Publish-Time Sanitizer Pipeline (MANDATORY for fleet skills with private context)
+
+**Why this exists.** A skill authored inside a working agent fleet (Atlas, etc.) accumulates fleet-specific signal — named agent references (Orchestrator, Researcher), workspace paths (`~/my-fleet/...`), war stories with private context. This signal makes the skill MORE effective for fleet agents but blocks public publish. The sanitizer pipeline lets you maintain ONE source of truth (the canonical fleet-rich SKILL.md) and emit a clean publishable copy on demand. Trust posture: defense in depth — automated transforms + post-scanner deny-list + manual diff before push.
+
+**Pipeline (3 stages, each fail-loud):**
+
+```bash
+# Set SANITIZER_DIR to where publish-skills/scripts/ is installed on your machine
+SANITIZER_DIR=<skills-install>/publish-skills/scripts  # adjust to your install path
+
+# Stage 1: Transform known-pattern leaks (paths, conventions). Strips author-marked private blocks.
+# Refuses if output path equals input path (would destroy canonical fleet copy).
+bash $SANITIZER_DIR/publish-sanitize.sh path/to/SKILL.md /tmp/SKILL.publish.md
+
+# Stage 2: Deny-list scan on output. STRICT BY DEFAULT: WARN matches are treated as BLOCK.
+# Exit 2 = BLOCK (publish forbidden); 1 = WARN-only with --allow-warn; 0 = clean.
+bash $SANITIZER_DIR/post-scan.sh /tmp/SKILL.publish.md
+# If exit 2: remediate (wrap source in atlas-private markers OR rephrase) and re-run from Stage 1.
+# If you intentionally want to ship despite WARN matches: rerun with `--allow-warn` and review carefully.
+
+# Stage 3: Manual diff. Operator-in-loop final stop.
+# For first publish (no prior published version exists):
+diff -u path/to/SKILL.md /tmp/SKILL.publish.md | less
+# Review every removal as intentional, every transform as desired.
+# For subsequent publishes:
+diff -u path/to/last-published-SKILL.md /tmp/SKILL.publish.md | less
+
+# Then: cp /tmp/SKILL.publish.md path/to/public-repo/SKILL.md && gh pr create ...
+```
+
+**Author discipline (the only manual surface):**
+
+Mark fleet-private content with markers; the sanitizer strips between them. Markers are case-insensitive and whitespace-tolerant inside (e.g. `atlas-private:start` with any case/spacing variation); nested markers are rejected (sanitizer exits 2):
+
+```markdown
+<!-- [your-fleet]-private:start -->
+War story: <agent-name-here> dispatched a sprint at 18:00 ET via the bridge daemon...
+(everything between markers ships in fleet copy; gets stripped on publish)
+<!-- /[your-fleet]-private:end -->
+```
+*(Replace `[your-fleet]` with your fleet's name — e.g. `atlas-private`, `acme-private`, etc. Update the sanitizer regex to match.)*
+
+Inside markers: anything goes (real agent names, real paths, real incidents). Outside markers: only generic/portable content. The post-scanner BLOCKS unmarked named-entity leaks — if you forget to wrap, publish fails loud.
+
+**Bypass risk to know about:** if you see a BLOCK on `/tmp/SKILL.publish.md`, the correct fix is to **wrap the source in atlas-private markers** (or rephrase the source), then re-run the pipeline. Manually deleting the offending line FROM THE OUTPUT instead leaves the underlying source still leaking — next publish reintroduces the same leak. Wrap, don't delete.
+
+**Refinement protocol:**
+
+- **New leak class encountered?** Append a row to `$SANITIZER_DIR/rules/transforms.tsv` (auto-replace) OR `$SANITIZER_DIR/rules/deny-list.tsv` (BLOCK on detection). Rules files are append-only — never delete a rule unless it produces a verified false positive.
+- **New skill ready to publish?** Drop a fixture into `$SANITIZER_DIR/test-fixtures/input/` with the leak class. If it doesn't have a corresponding `expected/` file, it becomes a scan-block test. Run `bash $SANITIZER_DIR/test-publish-sanitize.sh` before any sanitizer-rule change to confirm no regressions.
+- **Sanitizer or scanner produced a false positive on something legitimate?** Refine the regex; add a fixture; rerun tests. Don't remove the rule.
+
+**Test the pipeline before relying on it:**
+
+```bash
+bash $SANITIZER_DIR/test-publish-sanitize.sh
+# Expected: all PASS. If anything fails, the sanitizer is broken — do not publish.
+```
+
+**This step is MANDATORY** for any skill that lives inside a working agent fleet and is being prepared for public publish. Real-world use on internal fleet skills confirmed the leak class is real and recurring — every fleet skill has it. The sanitizer pipeline is the durable mitigation.
 
 ## Recommended: Two-Pass Review
 
@@ -172,12 +235,54 @@ After pushing, verify on GitHub:
 3. File structure looks clean (no .DS_Store, no stray files)
 4. Clone and run: `git clone ... && node scripts/my-script.js --help`
 
+### 10. Set repo metadata (description + homepage + topics)
+
+Once the repo exists, set discovery metadata so the skill is findable:
+
+```bash
+# Description should LEAD WITH THE SKILL NAME, not a category prefix.
+# Bad:  "AgentSkill: do X for Y" — generic; loses the skill's identity in search
+# Good: "<skill-name> — do X for Y. Key features. Spec compliance."
+gh repo edit <org>/<skill-name> --description "<skill-name> — <one-line what + why>"
+
+# Homepage: clear if no real project homepage exists. Don't point at the spec
+# (agentskills.io) — that's the SPEC's home, not the SKILL's home.
+gh repo edit <org>/<skill-name> --homepage ""
+# OR set to a real project page if you have one:
+gh repo edit <org>/<skill-name> --homepage "https://<your-skill-page>"
+
+# Topics: 4-8 tags for discovery. Standard agentskills topics + skill-specific.
+gh repo edit <org>/<skill-name> --add-topic agentskills,claude-code,<topic1>,<topic2>,<topic3>
+```
+
+**Topic tag picks (canonical for fleet skills):**
+- `agentskills` — for the agentskills.io ecosystem
+- `claude-code` — works in Claude Code (omit if true model-agnostic)
+- The skill's primary noun (e.g., `session-handoff`, `code-review`, `pre-publish`)
+- The skill's category (e.g., `meta-skill`, `runbook`, `data-fetching`)
+- Observability / autoresearch tag if applicable: `observability`
+
+**Verify final state:**
+```bash
+gh repo view <org>/<skill-name> --json description,homepageUrl,repositoryTopics
+```
+
+**Why this matters:** spec compliance and a clean LICENSE get you to "valid skill"; description + homepage + topics get you to "discoverable skill." A published skill with an accurate description and 5+ topics shows up in GitHub search; one without is invisible.
+
 ## References
 
 - [Agent Skills Specification](https://agentskills.io/specification)
 - [skills-ref Validation Library](https://github.com/agentskills/agentskills/tree/main/skills-ref)
 - [Example Skills (Anthropic)](https://github.com/anthropics/skills)
 - [Creating Custom Skills (Claude)](https://support.claude.com/en/articles/12512198-creating-custom-skills)
+
+### Sanitizer infrastructure (installed with this skill)
+- `<skills-install>/publish-skills/scripts/publish-sanitize.sh` — Stage 1 sanitizer (transforms + marker stripping)
+- `<skills-install>/publish-skills/scripts/post-scan.sh` — Stage 2 deny-list scanner (BLOCK / WARN severity)
+- `<skills-install>/publish-skills/scripts/test-publish-sanitize.sh` — regression test suite
+- `<skills-install>/publish-skills/scripts/rules/transforms.tsv` — append-only path/token transforms
+- `<skills-install>/publish-skills/scripts/rules/deny-list.tsv` — append-only deny-list (severity-tagged)
+- `<skills-install>/publish-skills/scripts/test-fixtures/{input,expected}/` — adversarial test corpus
 
 ---
 

@@ -1,5 +1,6 @@
 ---
 name: plan-review
+runtime: claude-code
 version: 2.0.0
 description: |
   Two-phase plan review: product thinking with the user (is this the right

@@ -1,5 +1,6 @@
 ---
 name: writing-plans
+runtime: claude-code
 description: |
   Use when you have a spec or requirements for a multi-step task, before touching code.
   Trigger conditions: received a feature spec, user described a multi-step task, brainstorming
@@ -174,7 +175,7 @@ After the plan is saved and review-approved, offer execution choice:
 2. **Scope creep during planning:** Flag "while we're at it" additions as optional or out-of-scope. Never silently include them.
 3. **Review loop deadlock:** If reviewer keeps flagging the same issues after 3 iterations, the spec is the problem. Surface to human rather than rewriting the plan a 4th time.
 4. **Missing spec = broken plan:** Writing-plans without an approved spec produces plans that don't match what was actually intended. Always start from a brainstorming-produced spec.
-5. **Save path drift:** Upstream obra default is `docs/superpowers/plans/`. Watson convention is `plans/`. Don't mix these in plan headers.
+5. **Save path drift:** Upstream obra default is `docs/superpowers/plans/`. local convention is `plans/`. Don't mix these in plan headers.
 6. **Non-code task adaptation:** For docs-only or infra-only tasks, the TDD loop doesn't apply. Keep the bite-sized step discipline but adapt the step types.
 7. **Spike tasks are not optional when approach is unknown:** If you're guessing at implementation details while writing the plan, insert a spike task. Plans with embedded guesses produce blocked implementers.
 

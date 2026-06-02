@@ -99,7 +99,13 @@ curl -s "https://api.fxtwitter.com/USER/status/ID" | jq '{
 }'
 
 # X Articles (long-form content blocks)
-curl -s "https://api.fxtwitter.com/USER/status/ID" | jq -r '.tweet.article.content.blocks[].text' 2>/dev/null
+curl -s "https://api.fxtwitter.com/USER/status/ID" | jq -r '.tweet.article.content.blocks[] | select(.text) | .text' 2>/dev/null
+
+# Batch-save multiple X links for later synthesis
+# (preserves raw JSON; useful when user says fetch/read/save all links)
+mkdir -p references/raw/x
+curl -L --fail --silent --show-error "https://api.fxtwitter.com/USER/status/ID" \
+  -o "references/raw/x/USER-ID.json"
 ```
 
 ---
@@ -122,7 +128,9 @@ curl -s "https://api.fxtwitter.com/USER/status/ID" | jq -r '.tweet.article.conte
 
 **User:** "Summarize this: https://x.com/someone/status/987654321"
 
-**Action:** Fetch and check for `.tweet.article` field. If present, extract article content from `.tweet.article.content.blocks[].text` and summarize.
+**Action:** Fetch and check for `.tweet.article` field. If present, extract article content from `.tweet.article.content.blocks[].text` and summarize. Some X Article posts have root `.tweet.text` containing only a `t.co` link, so do **not** treat an empty/short root tweet as the whole content until you inspect `tweet.article.content.blocks`.
+
+For article-heavy research sessions, save the full raw JSON alongside any extracted markdown/text. The raw JSON is the durable source for quotes, engagement stats, media references, and block-level article content.
 
 ---
 
@@ -170,3 +178,7 @@ When you detect an X URL in user input:
 - `x-research` — Agentic search across X for topics and discourse
 - `x-engage` — Draft and post replies to X (with approval)
 - `x-master` — Master routing skill for all X operations
+
+## References
+
+- `references/batch-x-resource-fetch.md` — pattern for saving and manifesting many X links without skipping X Article block content

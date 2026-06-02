@@ -16,7 +16,7 @@ Autonomous, goal-driven work sprints for Cowork and Claude Code. Define goals, w
 
 **Claude Code:**
 ```bash
-cp -r sprint-cowork/ ~/.claude/skills/sprint-cowork
+cp -r sprint-cowork/ <skills-install>/sprint-cowork
 ```
 
 ## Usage
