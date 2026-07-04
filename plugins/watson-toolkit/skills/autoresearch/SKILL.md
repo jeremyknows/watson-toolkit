@@ -1,7 +1,10 @@
 ---
 name: autoresearch
 runtime: claude-code
-description: Autonomous Goal-directed Iteration. Apply Karpathy's autoresearch principles to ANY task. Loops autonomously — modify, verify, keep/discard, repeat. Supports bounded iteration via Iterations: N inline config.
+description: >
+  Autonomous goal-directed iteration. Apply Karpathy's autoresearch principles
+  to any task. Loops autonomously through modify, verify, keep or discard, and
+  repeat. Supports bounded iteration via inline iteration count.
 version: 1.8.2
 ---
 

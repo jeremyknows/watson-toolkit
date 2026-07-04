@@ -3,18 +3,12 @@ name: sprint-cowork
 runtime: claude-code
 description: >
   Run autonomous work sprints with periodic check-ins and goal tracking.
-  Use this skill whenever the user wants autonomous, background, or scheduled work — even if they
-  don't say "sprint". Trigger phrases: "sprint on X", "work on this for the next 2 hours",
-  "keep working on X while I'm away", "run this overnight", "work on this while I sleep",
-  "keep going on X", "check this every hour", "autonomous sprint", "start a sprint",
-  "deep work session on X", "can you do this in the background".
-  Sets up a scheduled task that wakes on an interval, reads goals and state, dispatches workers
-  via sub-agents, tracks progress, and synthesizes results. The core value is "walk away" work —
-  the user starts it, leaves, and comes back to finished results.
-  Supports self-scoping sprints — give a vague topic like "improve security" or "reduce tech debt"
-  and the first cycle discovers specific goals automatically.
-  NOT for: work requiring frequent human decisions, single quick tasks that fit in one session,
-  or externally-facing actions (deployments, emails, posts).
+  Use when the user wants autonomous, background, or scheduled work: sprint on a
+  topic, work for a set time, keep going while away, run overnight, check hourly,
+  or do a deep work session. Sets up a scheduled loop that reads goals and
+  state, dispatches workers, tracks progress, and synthesizes results. Supports
+  self-scoping sprints from vague topics. Not for frequent human decisions,
+  quick single-session tasks, or external actions.
 license: MIT
 compatibility: "Cowork (scheduled tasks + Agent tool), Claude Code (while-loop); Hermes requires adaptation: use cronjob + delegate_task, not create_scheduled_task/Agent"
 metadata:
