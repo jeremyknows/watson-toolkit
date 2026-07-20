@@ -5,9 +5,10 @@ description: |
   create a continuation prompt, or "end session with a baton." A baton is a
   cold-start-ready prompt that lets a future fresh session pick up the work
   without re-discovery. Triggers on "/baton", "write the baton", "make a
-  continuation prompt", "next-session prompt", "handoff prompt". NOT FOR fully
-  complete sessions (nothing to continue) or open-ended exploration with no
-  concrete next-session shape.
+  continuation prompt", "next-session prompt", "handoff prompt". Also "/baton
+  micro" for a card-grade baton emitted as a kanban ticket body (six lines).
+  NOT FOR fully complete sessions (nothing to continue) or open-ended
+  exploration with no concrete next-session shape.
 license: MIT
 ---
 
@@ -137,6 +138,33 @@ If you keep a running improvements log, append one row per baton (date, target t
 | 9 | Did I check for a macro/vision/context doc and either reference it in the cold-start reads, or confirm none exists? "I didn't look" is N. | |
 
 **Below 6/9 is high probability of cold-session misdirection.** Don't ship below threshold; iterate.
+
+---
+
+## Micro baton — `/baton micro` (card-grade, ~2 min)
+
+The pattern above is a *session* baton. A **micro baton** is the same discipline at the smallest scale: one kanban card. When a close-out triage parks an unresolved item as a ticket, the card body IS the baton — so the pickup session pays no cold-start tax weeks later.
+
+**The rule:** no kanban ticket exists without a baton to feed its restart. Pay the restart cost at write time (context hot, near-free), not read time (cold, expensive).
+
+**The card body — six required lines:**
+
+```
+STATE: where this item stands right now, one or two lines
+TRIED: what was attempted, what failed and why. "nothing yet" is valid
+FILES: absolute paths touched or to-touch
+FIRST COMMAND: one copy-paste-runnable shell line the pickup session executes first
+DONE-WHEN: boolean acceptance check. observable, not vibes
+SESSION: date plus session reference
+```
+
+**Three guardrails:**
+
+1. **DONE-WHEN gates parkability** — if you can't write an observable DONE-WHEN, the item isn't understood well enough to park. Resolve or clarify it now instead of carding a question you'll re-derive later.
+2. **~15-line ceiling** — if the body needs more than ~15 lines, it's a session baton wearing a card costume. Write a full `/baton` and have the card cite it.
+3. **Idempotency key from the title** — re-parking the same item comments the existing card instead of cloning it, so chronic re-parking shows up as one loud card, not five quiet ones.
+
+**Per-card self-test (all three must be yes):** (1) could a cold session run FIRST COMMAND verbatim and be oriented? (2) is DONE-WHEN checkable by observation, not judgment? (3) do STATE + TRIED prevent re-walking a dead path? Any **no** means fix the field or don't park the item.
 
 ---
 
